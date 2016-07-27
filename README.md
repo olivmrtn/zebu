@@ -21,17 +21,17 @@ Get the development version from Github:
 devtools::install_github("olivmrtn/zebu")
 ```
 
-## Usage and theory
+## Usage and Theory
 
 Please read the R vignette located in inst/doc/ by typing `vignette(“zebu")` in the R console.
 
 ## Contact
 
 * Olivier MF Martin, Pharm.D.  
-[olivmrtn@gmail.com]()
+[olivmrtn@gmail.com](mailto:olivmrtn@gmail.com)
 
 * Michel Ducher, Pharm.D., Ph.D  
-[michel.ducher@chu-lyon.fr]()
+[michel.ducher@chu-lyon.fr](mailto:michel.ducher@chu-lyon.fr)
 
 ## License
 
