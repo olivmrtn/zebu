@@ -27,7 +27,7 @@ Please read the R vignette located in inst/doc/ by typing `vignette(“zebu")` i
 
 ## Contact
 
-* Olivier MF Martin, Pharm.D.  
+* Olivier M. F. Martin, Pharm.D.  
 [olivmrtn@gmail.com](mailto:olivmrtn@gmail.com)
 
 * Michel Ducher, Pharm.D., Ph.D  
