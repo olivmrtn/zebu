@@ -2,7 +2,7 @@
 
 ## Description
 
-The `zebu` R package implements different tools related to local association measures in three main functions. It replaces the previous web application writen using `shiny`.
+The `zebu` R package implements different tools related to local association measures in three main functions. It replaces the previous web application written using `shiny`.
 
 - `lassie` estimates local (and global) association measures: Ducher's Z, pointwise mutual information and normalized pointwise mutual information.
 
