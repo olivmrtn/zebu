@@ -35,7 +35,8 @@
 #'
 #' @export
 #'
-local_association <- function(x, measure) {
+local_association <- function(x,
+                              measure) {
   if (measure == "z") {
     duchers_z(x)
   } else if (measure == "pmi") {

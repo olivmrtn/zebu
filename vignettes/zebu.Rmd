@@ -11,8 +11,6 @@ abstract: "Association measures can be local or global. Local association measur
 The `zebu` R package allows estimation of local association measures and implements local association subgroup analysis, and thus, fills an unmet need. It is of interest to a wide range of scientific disciplines such as health and computer sciences, and can be used by anyone with a basic knowledge of the R language. It is provided under a GLP-3 licence; source code is available at http://github.com/olivmrtn/zebu. \\
 
 Keywords: measure of association, statistical independence, local association, local association subgroup analysis, pointwise mutual information, Ducher’s Z, R package"
-geometry: margin=44mm
-fontsize: 12pt
 vignette: >
   %\VignetteIndexEntry{"zebu: Local Association Measures"}
   %\VignetteEngine{knitr::rmarkdown}

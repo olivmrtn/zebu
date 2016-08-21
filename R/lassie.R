@@ -1,6 +1,7 @@
 #' @title Local Association Measures
 #'
-#' @description Estimates local (and global) association measures: Ducher's Z and pointwise mutual information and normalized pointwise mutual information.
+#' @description Estimates local (and global) association measures: Ducher's Z and pointwise mutual
+#' information and normalized pointwise mutual information.
 #'
 #' @inheritParams preprocess
 #' @inheritParams local_association
@@ -15,8 +16,10 @@
 #'   \item lassie_params parameters used in lassie.
 #'   }
 #'
-#' @seealso Results can be visualized using \code{\link[zebu]{plot.lassie}} and \code{\link[zebu]{print.lassie}}
-#' methods. \code{\link[zebu]{plot.lassie}} is only available in the bivariate case and returns a tile plot representing the probability or local association measure matrix.
+#' @seealso Results can be visualized using \code{\link[zebu]{plot.lassie}} and
+#' \code{\link[zebu]{print.lassie}}
+#' methods. \code{\link[zebu]{plot.lassie}} is only available in the bivariate case and returns
+#' a tile plot representing the probability or local association measure matrix.
 #' \code{\link[zebu]{print.lassie}} shows an array or a data.frame.
 #'
 #' Results can be saved using \code{\link[zebu]{write.lassie}}.
@@ -79,7 +82,12 @@
 #'
 #' @export
 #'
-lassie <- function(x, select, continuous, breaks, measure = "z", default_breaks = 4) {
+lassie <- function(x,
+                   select,
+                   continuous,
+                   breaks,
+                   measure = "z",
+                   default_breaks = 4) {
 
   # Preprocess data (handle missing data and discretize continuous variables)
   pre <- preprocess(x,
@@ -127,7 +135,15 @@ lassie <- function(x, select, continuous, breaks, measure = "z", default_breaks 
 #'
 #' @export
 #'
-print.lassie <- function(x, type, what_x, range, what_range, what_sort, decreasing, na.rm, ...) {
+print.lassie <- function(x,
+                         type,
+                         what_x,
+                         range,
+                         what_range,
+                         what_sort,
+                         decreasing,
+                         na.rm,
+                         ...) {
 
   # Check arguments
   if (missing(type) || is.null(type)) {
@@ -220,7 +236,13 @@ print.lassie <- function(x, type, what_x, range, what_range, what_sort, decreasi
 #'
 #' @export
 #'
-format.lassie <- function(x, what_x, range, what_range, what_sort, decreasing, na.rm, ...) {
+format.lassie <- function(x,
+                          what_x,
+                          range,
+                          what_range,
+                          what_sort,
+                          decreasing,
+                          na.rm, ...) {
 
   # Check arguments
   if (missing(what_x) || is.null(what_x)) {
@@ -263,7 +285,8 @@ format.lassie <- function(x, what_x, range, what_range, what_sort, decreasing, n
   if (missing(what_sort) || is.null(what_sort)) {
     what_sort <- what_x[1]
   } else if (any(!what_sort %in% colnames(format_x))) {
-    stop(paste("Invalid 'what_sort' argument: Choose from:", paste(colnames(format_x), collapse = ", ")))
+    stop(paste("Invalid 'what_sort' argument: Choose from:",
+               paste(colnames(format_x), collapse = ", ")))
   }
   index <- do.call("order", subset(format_x, select = what_sort))
 
@@ -302,7 +325,18 @@ format.lassie <- function(x, what_x, range, what_range, what_sort, decreasing, n
 #'
 #' @export
 #'
-plot.lassie <- function(x, what_x = "local", digits = 3, low = "blue", mid = "white", high = "red", na = "purple", text_colour = "black", text_size, limits, midpoint, ...) {
+plot.lassie <- function(x,
+                        what_x = "local",
+                        digits = 3,
+                        low = "blue",
+                        mid = "white",
+                        high = "red",
+                        na = "purple",
+                        text_colour = "black",
+                        text_size,
+                        limits,
+                        midpoint,
+                        ...) {
 
   # Check if lassie object is bivariate
   if (ncol(x$data$pp) != 2) {
@@ -371,9 +405,11 @@ plot.lassie <- function(x, what_x = "local", digits = 3, low = "blue", mid = "wh
   }
 
   # Plot as tiles
-  ggp <- ggplot2::ggplot(ggdf, ggplot2::aes(factor(Columns), factor(Rows), fill = Value)) +
+  ggp <- ggplot2::ggplot(ggdf, ggplot2::aes_string(x = "factor(Columns)",
+                                                   y = "factor(Rows)",
+                                                   fill = "Value")) +
     ggplot2::geom_tile() +
-    ggplot2::geom_text(ggplot2::aes(label = Text), size = text_size, colour = text_colour) +
+    ggplot2::geom_text(ggplot2::aes_string(label = "Text"), size = text_size, colour = text_colour) +
     ggplot2::scale_fill_gradient2(low = low,
                                   mid = mid,
                                   high = high,
@@ -402,8 +438,14 @@ plot.lassie <- function(x, what_x = "local", digits = 3, low = "blue", mid = "wh
 #'
 #' @export
 #'
-write.lassie <- function(x, file, sep = ",", dec = ".", col.names = TRUE, row.names = FALSE,
-                         quote = TRUE, ...) {
+write.lassie <- function(x,
+                         file,
+                         sep = ",",
+                         dec = ".",
+                         col.names = TRUE,
+                         row.names = FALSE,
+                         quote = TRUE,
+                         ...) {
 
   if (missing(file) || is.null(file)) {
     stop("Invalid 'file' argument: please use a character string naming a file ")
