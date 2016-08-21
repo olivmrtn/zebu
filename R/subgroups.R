@@ -4,7 +4,7 @@
 #' is dependent on the value of an another variable (named interacting variable).
 #' Associated variables are specified by \code{las}. Interacting variable(s)
 #' values are specified by \code{x}.
-#’
+#'
 #' @details Associated variables events are recoded into a subgroup variable according to local
 #' association values (and eventually significance) into 'positive', 'negative' and 'independent'.
 #' This is specified by the \code{thresholds}, \code{significance} and \code{alpha} arguments.

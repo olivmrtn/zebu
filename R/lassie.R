@@ -276,7 +276,7 @@ format.lassie <- function(x, what_x, range, what_range, what_sort, decreasing, n
 
   format_x <- format_x[index, ]
   if (na.rm) {
-    format_x <- na.omit(format_x)
+    format_x <- stats::na.omit(format_x)
   }
   format_x
 }
