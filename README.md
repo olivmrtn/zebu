@@ -14,7 +14,12 @@ The `zebu` R package implements different tools related to local association mea
 
 Install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/).
 
-Get the development version from Github:
+Get the released version from CRAN:
+```R
+install.packages("zebu")
+```
+
+or the development version from Github:
 
 ```R
 # install.packages("devtools")
@@ -23,7 +28,7 @@ devtools::install_github("olivmrtn/zebu")
 
 ## Usage and Theory
 
-Please read the R vignette located in inst/doc/ by typing `vignette(“zebu")` in the R console.
+Please read the R vignette [here](http://cdn.rawgit.com/olivmrtn/zebu/master/inst/doc/zebu.html) or by typing `vignette(“zebu")` in the R console.
 
 ## Contact
 
