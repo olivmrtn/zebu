@@ -20,7 +20,8 @@
 #'
 #' @export
 #'
-lassie_get <- function(x, what_x) {
+lassie_get <- function(x,
+                       what_x) {
 
   if (length(what_x) != 1 || ! what_x %in% c("local", "obs", "exp", "local_p")) {
     stop("Invalid argument: choose one from\n 'local': Local association measure\n 'obs': Observed multivariate probabilities\n 'exp': Expected multivariate probabilities (independence)\n 'local_p: p-value of local association (after running permtest)")

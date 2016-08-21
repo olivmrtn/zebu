@@ -13,5 +13,4 @@
 #' @docType package
 #' @name zebu
 #'
-#' @export
 NULL

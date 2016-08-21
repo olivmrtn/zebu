@@ -35,7 +35,11 @@
 #'
 #' @export
 #'
-preprocess <- function(x, select, continuous, breaks, default_breaks = 4) {
+preprocess <- function(x,
+                       select,
+                       continuous,
+                       breaks,
+                       default_breaks = 4) {
 
   # Try to convert 'x' to data.frame
   x <- tryCatch(as.data.frame(x), error = function(c) {

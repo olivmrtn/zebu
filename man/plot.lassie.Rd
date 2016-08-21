@@ -4,7 +4,7 @@
 \alias{plot.lassie}
 \title{Plot a lassie object}
 \usage{
-plot.lassie(x, what_x = "local", digits = 3, low = "blue",
+\method{plot}{lassie}(x, what_x = "local", digits = 3, low = "blue",
   mid = "white", high = "red", na = "purple", text_colour = "black",
   text_size, limits, midpoint, ...)
 }

@@ -33,7 +33,10 @@
 #'
 #' @export
 #'
-permtest <- function(x, nb = 1000, p_adjust = "BH", parallel = TRUE) {
+permtest <- function(x,
+                     nb = 1000,
+                     p_adjust = "BH",
+                     parallel = TRUE) {
 
   # Local functions ----
   # Permutation
