@@ -38,9 +38,6 @@ las <- lassie(cars)
 # Permutation test using default settings
 permtest(las)
 
-# Permutation test using 2000 iterations and no p-value adjustment method
-permtest(las, nb = 2000, p_adjust = 'none')
-
 }
 \seealso{
 \code{\link[zebu]{lassie}}

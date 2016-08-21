@@ -31,9 +31,6 @@
 #' # Permutation test using default settings
 #' permtest(las)
 #'
-#' # Permutation test using 2000 iterations and no p-value adjustment method
-#' permtest(las, nb = 2000, p_adjust = 'none')
-#'
 #' @export
 #'
 permtest <- function(x, nb = 1000, p_adjust = "BH", parallel = TRUE) {
