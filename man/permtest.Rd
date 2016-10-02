@@ -4,7 +4,8 @@
 \alias{permtest}
 \title{Permutation test for local and global association measures}
 \usage{
-permtest(x, nb = 1000, p_adjust = "BH", parallel = TRUE)
+permtest(x, nb = 1000, p_adjust = "BH", parallel = TRUE,
+  progress_bar = TRUE)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}
@@ -15,7 +16,11 @@ permtest(x, nb = 1000, p_adjust = "BH", parallel = TRUE)
 (see \code{\link[stats]{p.adjust.methods}} for a list of methods).}
 
 \item{parallel}{logical specifying if resampling should be parallelized.
-Relies on \link[parallel]{mcmapply} and hence is not available on Windows.}
+Relies on \code{\link[parallel]{mcmapply}} or \code{\link[pbmcapply]{pbmcmapply}} and
+hence is not available on Windows.}
+
+\item{logical}{specifying if progress bar should be displayed. Relies on
+\code{\link[pbapply]{pbsapply}} or \code{\link[pbmcapply]{pbmcmapply}}.}
 }
 \value{
 \code{permtest} returns an S3 object of \link[base]{class}

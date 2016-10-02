@@ -10,7 +10,11 @@
 #' (see \code{\link[stats]{p.adjust.methods}} for a list of methods).
 #'
 #' @param parallel logical specifying if resampling should be parallelized.
-#' Relies on \link[parallel]{mcmapply} and hence is not available on Windows.
+#' Relies on \code{\link[parallel]{mcmapply}} or \code{\link[pbmcapply]{pbmcmapply}} and
+#' hence is not available on Windows.
+#'
+#' @param logical specifying if progress bar should be displayed. Relies on
+#' \code{\link[pbapply]{pbsapply}} or \code{\link[pbmcapply]{pbmcmapply}}.
 #'
 #' @return \code{permtest} returns an S3 object of \link[base]{class}
 #' \code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}. Adds the following to the lassie object \code{x}:
@@ -36,13 +40,14 @@
 permtest <- function(x,
                      nb = 1000,
                      p_adjust = "BH",
-                     parallel = TRUE) {
+                     parallel = TRUE,
+                     progress_bar = TRUE) {
 
   # Local functions ----
   # Permutation
   compute_perm <- function(i) {
     # Permute data.frame
-    perm <- apply(x$data$pp, 2, sample)
+    perm <- as.data.frame(apply(x$data$pp, 2, sample))
 
     # Compute association measures
     prob <- zebu::estimate_prob(perm)
@@ -81,10 +86,18 @@ permtest <- function(x,
   perm_params <- list(nb = nb, p_adjust = p_adjust) # Save parameters in list
 
   # Resampling ----
-  if (parallel) {
+  if (! parallel & ! progress_bar) {
+    permutations <- sapply(1:nb, compute_perm)
+
+  } else if (parallel & ! progress_bar) {
     permutations <- parallel::mcmapply(compute_perm, 1:nb)
-  } else {
+
+  } else if (! parallel & progress_bar) {
     permutations <- pbapply::pbsapply(1:nb, compute_perm)
+
+  } else {
+    permutations <- pbmcapply::pbmcmapply(compute_perm, 1:nb)
+
   }
   permutations <- t(permutations)
 
