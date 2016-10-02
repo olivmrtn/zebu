@@ -18,7 +18,8 @@
 #'
 #' @seealso Results can be visualized using \code{\link[zebu]{plot.lassie}} and
 #' \code{\link[zebu]{print.lassie}}
-#' methods. \code{\link[zebu]{plot.lassie}} is only available in the bivariate case and returns
+#' methods. \code{\link[zebu]{plot.lassie}} is only available
+#' in the bivariate case and returns
 #' a tile plot representing the probability or local association measure matrix.
 #' \code{\link[zebu]{print.lassie}} shows an array or a data.frame.
 #'

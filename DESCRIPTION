@@ -20,7 +20,8 @@ Imports: ggplot2 (>= 2.0.0),
     reshape2 (>= 1.4.0),
     pbapply (>= 1.1.0),
     plyr (>= 1.8.0),
-    parallel (>= 3.2.0)
+    parallel (>= 3.2.0),
+    pbmcapply
 Suggests: knitr,
     rmarkdown,
     devtools
