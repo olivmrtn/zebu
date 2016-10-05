@@ -1,8 +1,14 @@
 #' Permutation test for local and global association measures
 #'
-#' Permutation test: statistical significance of local and global association measures
+#' Permutation test: statistical significance of local and
+#' global association measures
 #'
 #' @param x \code{\link[zebu]{lassie}} S3 object.
+#'
+#' @param group list of ingeters specifying which columns should be permuted
+#' together. This is useful for the multivariate case, for example, when there
+#' is many dependant variables and one independant variable.
+#' By default, permutes all columns separetely.
 #'
 #' @param nb number of resampling iterations.
 #'
@@ -10,14 +16,16 @@
 #' (see \code{\link[stats]{p.adjust.methods}} for a list of methods).
 #'
 #' @param parallel logical specifying if resampling should be parallelized.
-#' Relies on \code{\link[parallel]{mcmapply}} or \code{\link[pbmcapply]{pbmcmapply}} and
-#' hence is not available on Windows.
+#' Relies on \code{\link[parallel]{mcmapply}} or
+#' \code{\link[pbmcapply]{pbmcmapply}} and hence is not available on Windows.
 #'
-#' @param logical specifying if progress bar should be displayed. Relies on
-#' \code{\link[pbapply]{pbsapply}} or \code{\link[pbmcapply]{pbmcmapply}}.
+#' @param progress_bar logical specifying if progress bar should be displayed.
+#' Relies on \code{\link[pbapply]{pbsapply}} or
+#' \code{\link[pbmcapply]{pbmcmapply}}.
 #'
 #' @return \code{permtest} returns an S3 object of \link[base]{class}
-#' \code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}. Adds the following to the lassie object \code{x}:
+#' \code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}.
+#' Adds the following to the lassie object \code{x}:
 #' \itemize{
 #' \item global_p: global association p-value.
 #' \item local_p: array of local association p-values.
@@ -38,6 +46,7 @@
 #' @export
 #'
 permtest <- function(x,
+                     group = as.list(1:ncol(x$data$pp)),
                      nb = 1000,
                      p_adjust = "BH",
                      parallel = TRUE,
@@ -47,14 +56,18 @@ permtest <- function(x,
   # Permutation
   compute_perm <- function(i) {
     # Permute data.frame
-    perm <- as.data.frame(apply(x$data$pp, 2, sample))
+    nr <- nrow(df)
+    perm <- do.call(cbind, lapply(group, function(j) {
+      i <- sample(seq_len(nr))
+      df[i, j, drop = FALSE]
+    }))
 
     # Compute association measures
     prob <- zebu::estimate_prob(perm)
     lam <- zebu::local_association(prob, measure)
 
     # Global is first row, all other rows are local association values
-    c(lam$global, lam$local)
+    c(global = lam$global, local = lam$local)
   }
 
   # Estimate p-value by intersecting with values obtained with permutated datasets
@@ -78,7 +91,12 @@ permtest <- function(x,
     stop(paste("Invalid 'p_adjust' argument: methods supported are", stats::p.adjust.methods))
   }
 
+  if (! identical(as.integer(sort(unlist(group))), as.integer(1:ncol(x$data$pp)))) {
+    stop("Invalid 'group' argument: must be a list of integers that correspond to the number of columns in data.")
+  }
+
   # Compute general variables ----
+  df <- x$data$pp
   observed <- x$prob$observed  # Observed multivariate probability
   dimensions <- dim(observed)  # Dimensions
   dim_names <- dimnames(observed)  # Dimension names
@@ -97,7 +115,7 @@ permtest <- function(x,
 
   } else {
     permutations <- pbmcapply::pbmcmapply(compute_perm, 1:nb)
-
+    cat("\n")
   }
   permutations <- t(permutations)
 

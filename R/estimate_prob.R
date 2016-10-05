@@ -18,8 +18,8 @@ estimate_prob <- function(x) {
 
   # Check if matrix or data frame
   if (!is.data.frame(x)) {
-    x <- tryCatch(data.frame(x), error = function(c) {
-      stop("Invalid 'x' argument: must be a 'data.frame' or 'matrix'")
+    x <- tryCatch(as.data.frame(x), error = function(c) {
+      stop("Invalid 'x' argument: must be convertible to a data.frame")
     })
   }
   # Check if there are at least two variables
