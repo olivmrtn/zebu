@@ -4,11 +4,16 @@
 \alias{permtest}
 \title{Permutation test for local and global association measures}
 \usage{
-permtest(x, nb = 1000, p_adjust = "BH", parallel = TRUE,
-  progress_bar = TRUE)
+permtest(x, group = as.list(1:ncol(x$data$pp)), nb = 1000,
+  p_adjust = "BH", parallel = TRUE, progress_bar = TRUE)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}
+
+\item{group}{list of ingeters specifying which columns should be permuted
+together. This is useful for the multivariate case, for example, when there
+is many dependant variables and one independant variable.
+By default, permutes all columns separetely.}
 
 \item{nb}{number of resampling iterations.}
 
@@ -16,15 +21,17 @@ permtest(x, nb = 1000, p_adjust = "BH", parallel = TRUE,
 (see \code{\link[stats]{p.adjust.methods}} for a list of methods).}
 
 \item{parallel}{logical specifying if resampling should be parallelized.
-Relies on \code{\link[parallel]{mcmapply}} or \code{\link[pbmcapply]{pbmcmapply}} and
-hence is not available on Windows.}
+Relies on \code{\link[parallel]{mcmapply}} or
+\code{\link[pbmcapply]{pbmcmapply}} and hence is not available on Windows.}
 
-\item{logical}{specifying if progress bar should be displayed. Relies on
-\code{\link[pbapply]{pbsapply}} or \code{\link[pbmcapply]{pbmcmapply}}.}
+\item{progress_bar}{logical specifying if progress bar should be displayed.
+Relies on \code{\link[pbapply]{pbsapply}} or
+\code{\link[pbmcapply]{pbmcmapply}}.}
 }
 \value{
 \code{permtest} returns an S3 object of \link[base]{class}
-\code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}. Adds the following to the lassie object \code{x}:
+\code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}.
+Adds the following to the lassie object \code{x}:
 \itemize{
 \item global_p: global association p-value.
 \item local_p: array of local association p-values.
@@ -34,7 +41,8 @@ hence is not available on Windows.}
 }
 }
 \description{
-Permutation test: statistical significance of local and global association measures
+Permutation test: statistical significance of local and
+global association measures
 }
 \examples{
 # Calling lassie on cars dataset
