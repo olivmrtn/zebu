@@ -6,7 +6,7 @@ The `zebu` R package implements different tools related to local association mea
 
 - `lassie` estimates local (and global) association measures: Ducher's Z, pointwise mutual information and normalized pointwise mutual information.
 
-- `permtest` accesses the significance of local (and global) association values using  p-values estimated by permutations.
+- `permtest` accesses the significance of local (and global) association values using p-values estimated by permutations.
 
 - `subgroups` identifies if the association between variables is dependent on the value of another variable.
 
@@ -28,7 +28,7 @@ devtools::install_github("olivmrtn/zebu")
 
 ## Usage and Theory
 
-Please read the R vignette [here](http://cdn.rawgit.com/olivmrtn/zebu/master/inst/doc/zebu.html) or by typing `vignette(“zebu")` in the R console.
+Please read the [vignette](http://cdn.rawgit.com/olivmrtn/zebu/master/inst/doc/zebu.html).
 
 ## Contact
 
@@ -40,7 +40,7 @@ Please read the R vignette [here](http://cdn.rawgit.com/olivmrtn/zebu/master/ins
 
 ## License
 
-zebu 0.1.0
+zebu 0.1.1
 Copyright (C) 2016
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
