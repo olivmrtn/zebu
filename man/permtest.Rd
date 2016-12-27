@@ -4,16 +4,17 @@
 \alias{permtest}
 \title{Permutation test for local and global association measures}
 \usage{
-permtest(x, group = as.list(1:ncol(x$data$pp)), nb = 1000,
-  p_adjust = "BH", parallel = TRUE, progress_bar = TRUE)
+permtest(x, group = as.list(colnames(x$data$pp)), nb = 1000L,
+  p_adjust = "BH", parallel = FALSE, progress_bar = FALSE,
+  ncpus = getOption("zebu.ncpus", 1L))
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}
 
-\item{group}{list of ingeters specifying which columns should be permuted
-together. This is useful for the multivariate case, for example, when there
-is many dependant variables and one independant variable.
-By default, permutes all columns separetely.}
+\item{group}{list of column names specifying which columns
+should be permuted together. This is useful for the multivariate case,
+for example, when there is many dependant variables and one
+independant variable. By default, permutes all columns separetely.}
 
 \item{nb}{number of resampling iterations.}
 
@@ -21,12 +22,12 @@ By default, permutes all columns separetely.}
 (see \code{\link[stats]{p.adjust.methods}} for a list of methods).}
 
 \item{parallel}{logical specifying if resampling should be parallelized.
-Relies on \code{\link[parallel]{mcmapply}} or
-\code{\link[pbmcapply]{pbmcmapply}} and hence is not available on Windows.}
+Relies on \code{\link[foreach]{foreach}} and \code{doSNOW}.}
 
-\item{progress_bar}{logical specifying if progress bar should be displayed.
-Relies on \code{\link[pbapply]{pbsapply}} or
-\code{\link[pbmcapply]{pbmcmapply}}.}
+\item{progress_bar}{logical specifying if progress bar should be displayed.}
+
+\item{ncpus}{\code{integer} specifying number of processes to be used in
+parallel operation.}
 }
 \value{
 \code{permtest} returns an S3 object of \link[base]{class}

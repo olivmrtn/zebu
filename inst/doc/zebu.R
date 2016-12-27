@@ -1,3 +1,6 @@
+## ----opts = TRUE, setup = TRUE, include = FALSE--------------------------
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+
 ## ------------------------------------------------------------------------
 set.seed(63) # Set seed for reproducibility
 
@@ -16,7 +19,8 @@ las <- lassie(trial,
 las <- permtest(las, 
                 nb = 1000, 
                 p_adjust = "BH", 
-                parallel = TRUE)
+                parallel = FALSE, 
+                progress_bar = FALSE)
 
 ## ------------------------------------------------------------------------
 print(las)
@@ -42,6 +46,7 @@ las2 <- lassie(trial,
                select = c("drug", "postbiom", "resistance"), 
                continuous = "postbiom", 
                breaks = c(0, 0.7, 1))
-las2 <- permtest(las2)
+las2 <- permtest(las2, 
+                 group = list("drug", c("postbiom", "resistance")), progress_bar = FALSE)
 print(las2)
 

@@ -5,10 +5,10 @@
 #'
 #' @param x \code{\link[zebu]{lassie}} S3 object.
 #'
-#' @param group list of ingeters specifying which columns should be permuted
-#' together. This is useful for the multivariate case, for example, when there
-#' is many dependant variables and one independant variable.
-#' By default, permutes all columns separetely.
+#' @param group list of column names specifying which columns
+#' should be permuted together. This is useful for the multivariate case,
+#' for example, when there is many dependant variables and one
+#' independant variable. By default, permutes all columns separetely.
 #'
 #' @param nb number of resampling iterations.
 #'
@@ -16,12 +16,12 @@
 #' (see \code{\link[stats]{p.adjust.methods}} for a list of methods).
 #'
 #' @param parallel logical specifying if resampling should be parallelized.
-#' Relies on \code{\link[parallel]{mcmapply}} or
-#' \code{\link[pbmcapply]{pbmcmapply}} and hence is not available on Windows.
+#' Relies on \code{\link[foreach]{foreach}} and \code{doSNOW}.
 #'
 #' @param progress_bar logical specifying if progress bar should be displayed.
-#' Relies on \code{\link[pbapply]{pbsapply}} or
-#' \code{\link[pbmcapply]{pbmcmapply}}.
+#'
+#' @param ncpus \code{integer} specifying number of processes to be used in
+#' parallel operation.
 #'
 #' @return \code{permtest} returns an S3 object of \link[base]{class}
 #' \code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}.
@@ -46,15 +46,16 @@
 #' @export
 #'
 permtest <- function(x,
-                     group = as.list(1:ncol(x$data$pp)),
-                     nb = 1000,
+                     group = as.list(colnames(x$data$pp)),
+                     nb = 1000L,
                      p_adjust = "BH",
-                     parallel = TRUE,
-                     progress_bar = TRUE) {
+                     parallel = FALSE,
+                     progress_bar = FALSE,
+                     ncpus = getOption("zebu.ncpus", 1L)) {
 
   # Local functions ----
   # Permutation
-  compute_perm <- function(i) {
+  compute_perm <- function() {
     # Permute data.frame
     nr <- nrow(df)
     perm <- do.call(cbind, lapply(group, function(j) {
@@ -91,8 +92,8 @@ permtest <- function(x,
     stop(paste("Invalid 'p_adjust' argument: methods supported are", stats::p.adjust.methods))
   }
 
-  if (! identical(as.integer(sort(unlist(group))), as.integer(1:ncol(x$data$pp)))) {
-    stop("Invalid 'group' argument: must be a list of integers that correspond to the number of columns in data.")
+  if (! is.list(group)) {
+    stop("Invalid 'group' argument: must be a list of characters that correspond to colnames.")
   }
 
   # Compute general variables ----
@@ -103,19 +104,42 @@ permtest <- function(x,
   measure <- x$lassie_params[["measure"]]  # Get association measure used
   perm_params <- list(nb = nb, p_adjust = p_adjust) # Save parameters in list
 
+  # Convert group argument integers to characters refering to colnames
+  if (any(! unlist(group) %in% colnames(df))) {
+    stop("Invalid 'group' argument: must be a list of characters that correspond colnames.")
+  }
   # Resampling ----
-  if (! parallel & ! progress_bar) {
-    permutations <- sapply(1:nb, compute_perm)
+  i <- 0L
+  iterator <- iterators::icount(nb)
+  foreacher <- foreach::foreach(i = iterator, .combine = rbind)
+  expr <- {compute_perm()}
 
-  } else if (parallel & ! progress_bar) {
-    permutations <- parallel::mcmapply(compute_perm, 1:nb)
+  if (progress_bar) {
+    pb <- utils::txtProgressBar(min = 0L, max = nb, style = 3L)
+    progress <- function(i) utils::setTxtProgressBar(pb, i)
+    on.exit(close(pb), add = TRUE)
+  }
 
-  } else if (! parallel & progress_bar) {
-    permutations <- pbapply::pbsapply(1:nb, compute_perm)
+  if (parallel) {
+    doer <-  foreach::`%dopar%`
+    cl <- snow::makeCluster(ncpus)
+    doSNOW::registerDoSNOW(cl)
+    on.exit(snow::stopCluster(cl))
+
+    if (progress_bar) {
+      opts <- list(progress = progress)
+      foreacher <- foreach::foreach(i = iterator, .combine = rbind, .options.snow = opts)
+    }
+    permutations <- doer(foreacher, expr)
 
   } else {
-    permutations <- pbmcapply::pbmcmapply(compute_perm, 1:nb)
-    cat("\n")
+    doer <-  foreach::`%do%`
+
+    if (progress_bar) {
+      permutations <- doer(foreacher, {utils::setTxtProgressBar(pb, i); compute_perm()})
+    } else {
+      permutations <- doer(foreacher, expr)
+    }
   }
   permutations <- t(permutations)
 

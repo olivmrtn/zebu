@@ -3,10 +3,13 @@ zebu 0.1.0
 
 * First release
 
-Current
+zebu 0.1.1
 ----------------------------------------------------------------
 
-* Added grouping to permutation test
+* Added control to how dataset should be permuted through group argument
 
-* Added progress bar to parallelized permutation test 
+* Added progress bar to parallelized permutation test
 
+* Changed parallelization interface to foreach and doSNOW
+
+* Corrected typos in vignette

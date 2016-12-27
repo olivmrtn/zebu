@@ -6,9 +6,9 @@ author:
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 bibliography: bibliography.bib
-abstract: "Association measures can be local or global. Local association measures quantify the association for specific values of random variables (*e.g.* chi-square residuals). Global association measures yield a single value used to summarize the association for all values taken by random variables (*e.g.* chi-square). Classical data analysis has focused on global association and overlooked local association. Consequently, software presently available only allows computation of global association measures. Nonetheless, a significative global association can hide a non-significative local association, and a non-significative global association can hide a significative local association. Moreover, local association measures can be used as a criterion for subgroup analysis. This analysis allows to identify if the strenght of association between variables dependends on the value taken by another variable. \\
+abstract: "Association measures can be local or global. Local association measures quantify the association between specific values of random variables (*e.g.* chi-square residuals). Global association measures yield a single value used to summarize the association for all values taken by random variables (*e.g.* chi-square). Classical data analysis has focused on global association and overlooked local association. Consequently, software presently available only allows computation of global association measures. Nonetheless, a significative global association can hide a non-significative local association, and a non-significative global association can hide a significative local association. Moreover, local association measures can be used as a criterion for subgroup analysis. This analysis allows testing if the strength of association between variables depends on the value taken by another variable. \\
 
-The `zebu` R package allows estimation of local association measures and implements local association subgroup analysis, and thus, fills an unmet need. It is of interest to a wide range of scientific disciplines such as health and computer sciences, and can be used by anyone with a basic knowledge of the R language. It is provided under a GLP-3 licence; source code is available at http://github.com/olivmrtn/zebu. \\
+The `zebu` R package allows estimation of local association measures and implements local association subgroup analysis, and thus, fills an unmet need. It is of interest to a wide range of scientific disciplines such as health and computer sciences and can be used by anyone with a basic knowledge of the R language. It is provided under a GLP-3 license; source code is available at http://github.com/olivmrtn/zebu. \\
 
 Keywords: measure of association, statistical independence, local association, local association subgroup analysis, pointwise mutual information, Ducher’s Z, R package"
 vignette: >
@@ -16,6 +16,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r opts = TRUE, setup = TRUE, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+```
+
 
 ## Summary 
 
@@ -47,11 +52,11 @@ Science is concerned with the explanation of phenomena. This involves establishi
 
 Association measures can be local or global [@van_de_cruys_two_2011]. Local association measures quantify the association for specific values of random variables. In the case of a contingency table, they yield one value for each cell. An example is chi-square residuals that are computed when constructing a chi-square test. On the other hand, global association measures yield a single value used to summarize the association for all values taken by random variables. An example is the chi-square statistic, the sum of squared chi-square residuals [@sheskin_handbook_2007].
 
-Most often, we are only concerned with global association and overlook local association. For example, analysis of chi-square residuals is uncommon practice when compared to the chi-square independence test. Nonetheless, a significative global association can hide a non-significative local association, and a non-significative global association can hide a significative local association [@anselin_lisa_1995]. Accordingly, analysis of the association should not limit itself with the global perspective. Indeed, the association between two variables can depend on their values. For example, in threshold mechanisms, variables are only associated after a certain critical value. In this case, local association measures allow to pinpoint values for which variables are associated. Moreover, the existence of an association between two variables may depend on the value of a third variable. For example, the effect of a drug will depend on the patient's sensibility to the drug. The local association between drug intake and recovery will not be the same for patients that are sensitive then to those that are resistant to the drug. They form two different local association subgroups. Comparison of these subgroups in terms of other variables may help explain their differences. We will refer to this procedure as local association subgroup analysis.
+Most often, we are only concerned with the global association and overlook local association. For example, analysis of chi-square residuals is uncommon practice when compared to the chi-square independence test. Nonetheless, a significative global association can hide a non-significative local association, and a non-significative global association can hide a significative local association [@anselin_lisa_1995]. Accordingly, analysis of the association should not limit itself with the global perspective. Indeed, the association between two variables can depend on their values. For example, in threshold mechanisms, variables are only associated with each other above a certain critical value. In this case, local association measures allow pinpointing values for which variables are associated. Moreover, the existence of an association between two variables may depend on the value of a third variable. For example, the effect of a drug will depend on the patient's sensibility to the drug. The local association between drug intake and recovery will not be the same for patients that are sensitive then to those that are resistant to the drug. They form two different local association subgroups. Comparison of these subgroups in terms of other variables may help explain their differences. We will refer to this procedure as local association subgroup analysis.
 
-Local association measures are uncommonly used in the scientific literature, in terms of the number of articles. Nonetheless, the diversity of fields interested in these measures demonstrate their significance. Indeed, applications are found in computational linguistics [@van_de_cruys_two_2011], image processing [@isola_crisp_2014], health sciences such as cardiology [@sapoznikov_heart_2013] and geography [@anselin_lisa_1995]. Notwithstanding, software presently available only allows computation of global association measures. This is why we have developed the `zebu` R package described in this paper. It is provided under a GLP-3 licence; source code is available at http://github.com/olivmrtn/zebu.
+Local association measures are uncommonly used in the scientific literature, in terms of the number of articles. Nonetheless, the diversity of fields interested in these measures demonstrates their significance. Indeed, applications are found in computational linguistics [@van_de_cruys_two_2011], image processing [@isola_crisp_2014], health sciences such as cardiology [@sapoznikov_heart_2013] and geography [@anselin_lisa_1995]. Notwithstanding, software presently available only allows computation of global association measures. This is why we have developed the `zebu` R package described in this paper. It is provided under a GLP-3 license; source code is available at http://github.com/olivmrtn/zebu.
 
-The rest of the paper is organized as following. We first give the reader the necessary intuition and mathematical background. This leads to the description of Ducher's Z [@ducher_statistical_1994] and pointwise mutual information [@van_de_cruys_two_2011]. We introduce multivariate forms of these measures and suggest a normalization scheme for pointwise mutual information. We then present local association subgroup analysis. Subsequently, we illustrate the usage of local association measures and local subgroup analysis using the `zebu` R package. This will be undertaken using an example with simulated data about drug resistance. The paper ends with remarks over future development and research.
+The rest of the paper is organized as following. We first give the reader the necessary intuition and mathematical background. This leads to the description of Ducher's Z [@ducher_statistical_1994] and pointwise mutual information [@van_de_cruys_two_2011]. We introduce multivariate forms of these measures and suggest a normalization scheme for pointwise mutual information. We then present local association subgroup analysis. Subsequently, we illustrate the usage of local association measures and local subgroup analysis using the `zebu` R package. This will be undertaken using an example with simulated data about drug resistance. The paper ends with remarks on future development and research.
 
 
 <div id='section-background'>
@@ -59,7 +64,7 @@ The rest of the paper is organized as following. We first give the reader the ne
 
 Throughout the paper, we will suppose that all random variables are discrete and write them in capital letters such as $A$ and $B$. Possible values of these random variables (*i.e* events) will be written in lower letters such as $a$ and $b$.
  
-One way to think about association is as events co-occurring. For example, if event $a$ always occurs with event $b$, then these events are said to be associated. An intuitive measure of association could be the joint probability: $p(a, b)$, the long-term frequency of events showing up together. However, this measure fails if $a$ or $b$ is a rare event. Indeed, joint probabilities are always as small as its individual events are rare: $p(a, b) \leq \min p(a), p(b)$. As a consequence, it is necessary to compare the *observed* probabilities $p(a, b)$ to *expected* probabilities in which the variables are considered independent. The expected probability, if events were independent, is the factor of marginalized probabilities of events: $p(a) p(b)$. Independence is then defined by the following mathematical relation: $p(a, b) = p(a) p(b)$: local association measures are equal to zero.
+One way to think about statistical association is as events co-occurring. For example, if event $a$ always occurs with event $b$, then these events are said to be associated. An intuitive measure of association could be the joint probability: $p(a, b)$, the long-term frequency of events showing up together. However, this measure fails if $a$ or $b$ is a rare event. Indeed, joint probabilities are always as small as its individual events are rare: $p(a, b) \leq \min p(a), p(b)$. As a consequence, it is necessary to compare the *observed* probabilities $p(a, b)$ to *expected* probabilities in which the variables are considered independent. The expected probability, if events were independent, is the factor of marginalized probabilities of events: $p(a) p(b)$. Independence is then defined by the following mathematical relation: $p(a, b) = p(a) p(b)$: local association measures are equal to zero.
 
 Independence implies that knowing one or more variables does not give us any information about the others. This is exactly what we are not interested in. It is, however, possible define two interesting cases where the former equality does not hold: co-occurrence and mutual exclusivity. Co-occurrence, or positive association, is defined as events showing up more often than expected: $p(a, b) > p(a) p(b)$: local association measures are positive valued. Mutual exclusivity, or negative association, is defined as events showing up less often than expected: $p(a, b) < p(a) p(b)$: local association measures are negative valued.
 
@@ -125,7 +130,7 @@ A normalization scheme for $pmi$ has already been suggested by @bouma_normalized
 npmi(a, b) = 
 \begin{cases} 
 \frac{pmi(a, b)}{\max pmi(a, b)}
-= \frac{ h(a, b) - h(a) - h(b) }{ \min(h(a), h(b)) - h(a) - h(b) }	
+= \frac{ h(a, b) - h(a) - h(b) }{ \min(h(a), h(b)) - h(a) - h(b) }    
 & pmi(a, b) > 0 \\
 \\
 \frac{ pmi(a, b) }{- h(a, b) } 
@@ -181,7 +186,7 @@ Z(x_1, \ldots, x_n) =
 \[
 npmi(x_1, \ldots, x_n) = 
 \begin{cases} 
-\frac{ h(x_1, \ldots, x_n) - \sum_{i=1}^{n} h(x_i) }{ \min(h(x_1), \ldots, h(x_n)) - \sum_{i=1}^{n} h(x_i) }	
+\frac{ h(x_1, \ldots, x_n) - \sum_{i=1}^{n} h(x_i) }{ \min(h(x_1), \ldots, h(x_n)) - \sum_{i=1}^{n} h(x_i) }    
 & pmi(x_1, \ldots, x_n) > 0 \\
 \\
 \frac{ h(x_1, \ldots, x_n) - \sum_{i=1}^{n} h(x_i) }{ h(x_1, \ldots, x_n) }
@@ -201,9 +206,9 @@ These multivariate association measures may help identify complex association re
 <div id='section-lasa1'>
 #### Introductory Example
 
-In order to describe this methodology, an illustrative example concerning salt consumption and blood pressure will be discussed. This is widely inspired from @ducher_sodium_2003. Blood pressure is thought to be linearly related to salt consumption. However evidence supporting this association of variables is widely contradictory [@freedman_salt_2001]. This suggests that a global relationship may not be applicable to all individuals, but rather only to a subgroup of salt-sensitive individuals. These are to be opposed to salt-resistant individuals for whom no relationship can be established [@kaplan_kaplan_2010]. Global association measures may not be sensitive enough because salt-resistant individuals "dilute" the association that exists for salt-sensitive individuals.
+In order to describe this methodology, an illustrative example concerning salt consumption and blood pressure will be discussed. This is widely inspired from @ducher_sodium_2003. Blood pressure is thought to be linearly related to salt consumption. However, evidence supporting this association of variables is widely contradictory [@freedman_salt_2001]. This suggests that a global relationship may not be applicable to all individuals, but rather only to a subgroup of salt-sensitive individuals. These are to be opposed to salt-resistant individuals for whom no relationship can be established [@kaplan_kaplan_2010]. Global association measures may not be sensitive enough because salt-resistant individuals "dilute" the association that exists for salt-sensitive individuals.
 
-Local association measures allow to quantify association for specific values of salt consumption and blood pressure. Accordingly, individuals can be classified into three corresponding subgroups: independent, positive and negative local association. The positive subgroup corresponds to the subset of values that are well explained by the global association of variables (e.g. low blood pressure and low salt consumption, or high blood pressure and high salt consumption). The corresponding subgroup will thus be composed individuals statistically sensitive to salt. The negative subgroup corresponds to the subset of values badly explained by the global relationship (e.g. low blood pressure and high salt consumption). The corresponding subgroup will thus be composed of individuals statistically resistant to salt. Finally, the independent subgroup corresponds to values for which variables are independent. Once these local subgroups are formed, the global and local association between these subgroups and values of other variables can then be used to determine what distinguishes salt-sensitive from salt-resistant individuals. For example, one may find that young individuals are more resistant to salt (*i.e.* negative or independent subgroup associated to young age) than older individuals (*i.e.* positive subgroup associated to old age) [@weinberger_salt_1996].
+Local association measures allow quantifying association for specific values of salt consumption and blood pressure. Accordingly, individuals can be classified into three corresponding subgroups: independent, positive and negative local association. The positive subgroup corresponds to the subset of values that are well explained by the global association of variables (e.g. low blood pressure and low salt consumption, or high blood pressure and high salt consumption). The corresponding subgroup will thus be composed individuals statistically sensitive to salt. The negative subgroup corresponds to the subset of values badly explained by the global relationship (e.g. low blood pressure and high salt consumption). The corresponding subgroup will thus be composed of individuals statistically resistant to salt. Finally, the independent subgroup corresponds to values for which variables are independent. Once these local subgroups are formed, the global and local association between these subgroups and values of other variables can then be used to determine what distinguishes salt-sensitive from salt-resistant individuals. For example, one may find that young individuals are more resistant to salt (*i.e.* negative or independent subgroup associated to young age) than older individuals (*i.e.* positive subgroup associated to old age) [@weinberger_salt_1996].
 
 <div id='section-lasa2'>
 #### A More Formal Defintion
@@ -218,7 +223,7 @@ Negative&: \{(a, b) \; |\ L(a, b) < 0 \} \\
 \end{aligned}
 \]
 
-The local association between subgroups $S$ and another variable $C$ can then be estimated. This allows us to identify values $c$ of $C$ that determines the association between $A$ and $B$. In the `zebu` package, this procedure can be undertaken using the `subgroups` function that returns a `lassie` S3 object. Accordingly, significance of association can be accessed using the `permtest` function.
+The local association between subgroups $S$ and another variable $C$ can then be estimated. This allows us to identify values $c$ of $C$ that determines the association between $A$ and $B$. In the `zebu` package, this procedure can be undertaken using the `subgroups` function that returns a `lassie` S3 object. Accordingly, the significance of association can be accessed using the `permtest` function.
 
 
 <div id='section-ug'>
@@ -227,7 +232,7 @@ The local association between subgroups $S$ and another variable $C$ can then be
 <div id='section-ug1'>
 #### Data Simulation
 
-The relevance of local association measures and the usage of the `zebu` package will be illustrated with a simulated dataset of a clinical trial in which patient recovery is dependent on drug intake and their resistance to the drug. Briefly, the dataset is composed of 100 sick patients that are randomly allocated to the placebo or the drug group. These patients are characterized by a resistance to the drug as modelled by a binary variable; only half of the patients are sensitive. The health status of patients is monitored through a biomarker that takes continuous values between 0 and 1. Patients with levels above 0.7 are considered as having recovered. Pretreatment levels are modelled by a normal distribution centred around 0.3. The drug has an a mean positive effect of 0.6 on biomarker levels for drug sensitive patients and no effect on resistant patients. The placebo has a positive mean effect of 0.3. For more details about the data simulation, see the `trial.R` file in the `data-raw/` folder of the R package.
+The relevance of local association measures and the usage of the `zebu` package will be illustrated with a simulated dataset of a clinical trial in which patient recovery is dependent on drug intake and their resistance to the drug. Briefly, the dataset is composed of 100 sick patients that are randomly allocated to the placebo or the drug group. These patients are characterized by a resistance to the drug as modeled by a binary variable; only half of the patients are sensitive. The health status of patients is monitored through a biomarker that takes continuous values between 0 and 1. Patients with levels above 0.7 are considered as having recovered. Pretreatment levels are modeled by a normal distribution centered around 0.3. The drug has a mean positive effect of 0.6 on biomarker levels for drug-sensitive patients and no effect on resistant patients. The placebo has a positive mean effect of 0.3. For more details about the data simulation, see the `trial.R` file in the `data-raw/` folder of the R package.
 
 <div id='section-ug2'>
 #### Global and Local Asociation Between Taking the Drug and Recovery
@@ -254,13 +259,14 @@ las <- lassie(trial,
               measure = "z")
 ```
 
-The `permtest` function accesses the significance of local (and global) association using a permutation test. The number of iterations is specified by `nb` and the adjustment method of p-values for multiple comparison by `p_adjust` (as in the `p.adjust` function). Parallelization of permutations iterations is available for Linux and Mac machines.
+The `permtest` function accesses the significance of local (and global) association using a permutation test. The number of iterations is specified by `nb` and the adjustment method of p-values for multiple comparisons by `p_adjust` (as in the `p.adjust` function). Parallelization of permutations iterations is made possible thanks to the `foreach` and `doSNOW` package and is deactivated by default. The number of cpus can be set using the `zebu.ncpus` option. For example, to set the number of processes to 2:  `options(zebu.ncpus = 2)`. A progress bar is also available to make computations seem shorter than they actually are.
 
 ```{r}
 las <- permtest(las, 
                 nb = 1000, 
                 p_adjust = "BH", 
-                parallel = TRUE)
+                parallel = FALSE, 
+                progress_bar = FALSE)
 ```
 
 The `lassie` and `permtest` functions returns a `lassie` S3 object, as well as `permtest` for `permtest`. `lassie` objects can be visualized using the `plot` and `print` methods. Moreover, results can be saved in CSV format using `write.lassie`.
@@ -270,7 +276,7 @@ print(las)
 plot(las)
 ```
 
-The global association between drug intake and patient recovery is strong and statistically significant ($p < \frac{1}{1000}$). This would normally be interpreted as a positive effect of the drug on patient recovery. However, our simulation supposes that only 50% of patients are sensitive to drug. The former conclusion would thus be wrong in 50% of cases. Inspection of local association is of help here. 
+The global association between drug intake and patient recovery is strong and statistically significant ($p < \frac{1}{1000}$). This would normally be interpreted as a positive effect of the drug on patient recovery. However, our simulation supposes that only 50% of patients are sensitive to the drug. The former conclusion would thus be wrong in 50% of cases. Inspection of local association is of help here. 
 
 There is no local association between the events 'drug' and 'not recovering'. In plain English, this means that certain patients are insensitive (resistant) to the drug. Comparison of these patients with patients that exhibit positive (or negative) association may help identify differences between these two subgroups and explain why they are resistant to the drug. This can be done using local association subgroup analysis. Finally, note here that a non-significant local association can hide a significant global association.
 
@@ -305,28 +311,31 @@ print(sub)
 plot(sub)
 ```
 
-The global association between local association subgroups and drug resistance is strong and statistically significative. This indicates that the resistance variable has an influence on the association between drug intake and patient recovery. Local association indicates that drug sensitive patients are over-represented in the positive local association subgroup. This shows that these patients exhibit a positive correlation between drug intake and recovery. Moreover, drug-resistant patients are over-represented in the independent local association subgroup. This shows that there is no correlation between drug intake and recovery for these patients. To state this in a trivial manner, only drug sensitive patients are sensitive to the drug.
+The global association between local association subgroups and drug resistance is strong and statistically significative. This indicates that the resistance variable has an influence on the association between drug intake and patient recovery. The local association indicates that drug-sensitive patients are over-represented in the positive local association subgroup. This shows that these patients exhibit a positive correlation between drug intake and recovery. Moreover, drug-resistant patients are over-represented in the independent local association subgroup. This shows that there is no correlation between drug intake and recovery for these patients. To state this in a trivial manner, only drug-sensitive patients are sensitive to the drug.
 
 <div id='section-ug4'>
 #### Multivariate Association Between Drug Intake, Recovery and Resistance
 
-The number of variables that can be handled in the `zebu` package is not limited. Here under, for illustration, we estimate the trivariate association between drug intake, recovery and resistance. In this case, we obtain a multidimensional local association `array`. Because of this, association cannot be plotted as a tile plot; the `plot` method is not available. The `print` method allows to visualize results by melting the `array` into a `data.frame` sorted by decreasing local association.
+The number of variables that can be handled in the `zebu` package is not limited. Hereunder, for illustration, we estimate the trivariate association between drug intake, recovery, and resistance. The `permtest` function gives control on how to permute the dataset through the `group` argument. `group` is a list of `character`s corresponding to `colnames`. Permutations are performed per group meaning that the association structure is not broken within groups but only between them. In our case, we are studying the relation between `postbiom` and `resistance` with `drug` and only want to break the association structure with the `drug` response. but not between `postbiom` and `resistance`.
+
+In this case, we obtain a multidimensional local association `array`. Because of this, results cannot be plotted as a tile plot; the `plot` method is not available. The `print` method allows visualizing results by melting the `array` into a `data.frame` sorted by decreasing local association.
 
 ```{r}
 las2 <- lassie(trial, 
                select = c("drug", "postbiom", "resistance"), 
                continuous = "postbiom", 
                breaks = c(0, 0.7, 1))
-las2 <- permtest(las2)
+las2 <- permtest(las2, 
+                 group = list("drug", c("postbiom", "resistance")), progress_bar = FALSE)
 print(las2)
 ```
 
-Although statistically significant, the global association is very weak because of the absence of relationship between resistance and the other variables. Nonetheless, certain events are locally associated. For example,  being in the test group, having recovered and being sensitive to the drug are positively associated events. This corresponds to the patients that have reacted to the drug. Note here that a non-significant global association can hide a significant local association.
+Although statistically significant, the global association is very weak because of the absence of a relationship between resistance and the other variables. Nonetheless, certain events are locally associated. For example,  being in the test group, having recovered and being sensitive to the drug are positively associated events. This corresponds to the patients that have reacted to the drug. Note here that a non-significant global association can hide a significant local association.
 
 <div id='section-future'>
 ## Future Research and Development
 
-Local association measures are issued from empirical research. Although these have proven their interest in diverse applications, theoretical studies of their mathematical properties are sparse. For example, only Monte Carlo simulations of Ducher’s Z behaviour are available [@ducher_statistical_1994]. A more theoretical approach to these measures could be of interest. For example, by determining the theoretical null distribution of these measures. In addition, we have assumed mutually exclusivity of events for the multivariate association measures. This assumption may be too stringent for certain variables and usage of other independence models such as conditional independence may prove to be worthwhile. 
+Local association measures are issued from empirical research. Although these have proven their interest in diverse applications, theoretical studies of their mathematical properties are sparse. For example, only Monte Carlo simulations of Ducher’s Z behavior are available [@ducher_statistical_1994]. A more theoretical approach to these measures could be of interest. For example, by determining the theoretical null distribution of these measures. In addition, we have assumed mutually exclusivity of events for the multivariate association measures. This assumption may be too stringent for certain variables and usage of other independence models such as conditional independence may prove to be worthwhile. 
 
 Improvements to the `zebu` R package are also possible. For example, in `zebu`, discretization is a necessary step for studying continuous variables. We have restrained ourselves to very simple discretization methods: equal-width and user-defined. Other discretization algorithms exist [@dash_comparative_2011] and may be more adapted for the computation of association measures. Moreover, kernel methods could also be used to better handle continuous variables. Secondly, estimation of probabilities is done from the frequentist maximum-likelihood procedure which requires sufficiently large datasets. Unfortunately, in certain fields such as health sciences, datasets are sparse. Bayesian estimation methods have been shown to be more robust to small sample sizes by not relying on asymptomatic assumptions and by allowing integration of prior knowledge [@wilkinson_bayesian_2007]. Such an implementation may also prove to be of interest. Finally, the `permtest` function in Zebu is based on an iterative procedure that is slow in R. To speed this up, writing the function in C and calling it from R could be a reliable solution.
 
