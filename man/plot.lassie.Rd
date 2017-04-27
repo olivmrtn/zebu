@@ -46,4 +46,3 @@ the ggplot2 package. Only available for bivariate association.
 \seealso{
 \code{\link[zebu]{lassie}}
 }
-

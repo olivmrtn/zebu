@@ -92,4 +92,3 @@ print(sub)
 \seealso{
 Significance can be accessed using a permutation test: \code{\link[zebu]{permtest}}.
 }
-

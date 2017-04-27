@@ -43,4 +43,3 @@ measure arrays into a data.frame.
 \seealso{
 \code{\link[zebu]{lassie}}
 }
-

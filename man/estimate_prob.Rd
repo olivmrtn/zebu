@@ -41,4 +41,3 @@ prob <- estimate_prob(pre$pp)
 # Computes local and global association using Ducher's Z
 lam <- local_association(prob, measure = 'z')
 }
-

@@ -29,4 +29,3 @@ las <- lassie(trees)
 las_array <- lassie_get(las, 'local')
 
 }
-
