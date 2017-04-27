@@ -10,6 +10,6 @@ zebu 0.1.1
 
 * Added progress bar to parallelized permutation test
 
-* Changed parallelization interface to foreach and doSNOW
+* Changed parallelization interface to foreach and parallel
 
 * Corrected typos in vignette
