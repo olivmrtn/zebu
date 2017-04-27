@@ -42,4 +42,3 @@ Writes \code{\link[zebu]{lassie}} object to a file in a table structured format.
 \seealso{
 \code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}
 }
-

@@ -16,9 +16,9 @@
 #' (see \code{\link[stats]{p.adjust.methods}} for a list of methods).
 #'
 #' @param parallel logical specifying if resampling should be parallelized.
-#' Relies on \code{\link[foreach]{foreach}} and \code{doSNOW}.
+#' Relies on \code{\link[foreach]{foreach}} and \code{doParallel}.
 #'
-#' @param progress_bar logical specifying if progress bar should be displayed.
+#' @param progress_bar logical specifying if progress bar should be displayed. Does not work if parallel resampling is used.
 #'
 #' @param ncpus \code{integer} specifying number of processes to be used in
 #' parallel operation.
@@ -51,7 +51,7 @@ permtest <- function(x,
                      p_adjust = "BH",
                      parallel = FALSE,
                      progress_bar = FALSE,
-                     ncpus = getOption("zebu.ncpus", 1L)) {
+                     ncpus = getOption("zebu.ncpus", 2L)) {
 
   # Local functions ----
   # Permutation
@@ -122,13 +122,12 @@ permtest <- function(x,
 
   if (parallel) {
     doer <-  foreach::`%dopar%`
-    cl <- snow::makeCluster(ncpus)
-    doSNOW::registerDoSNOW(cl)
-    on.exit(snow::stopCluster(cl))
+    cl <- parallel::makeCluster(ncpus)
+    doParallel::registerDoParallel(cl)
+    on.exit(parallel::stopCluster(cl))
 
     if (progress_bar) {
-      opts <- list(progress = progress)
-      foreacher <- foreach::foreach(i = iterator, .combine = rbind, .options.snow = opts)
+      foreacher <- foreach::foreach(i = iterator, .combine = rbind)
     }
     permutations <- doer(foreacher, expr)
 

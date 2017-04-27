@@ -2,7 +2,7 @@ Package: zebu
 Type: Package
 Title: Local Association Measures
 Version: 0.1.1
-Date: 2016-12-27
+Date: 2017-04-26
 Authors@R: c(
     person("Olivier M. F.", "Martin", email = "olivmrtn@gmail.com", role = c("aut", "cre")),
     person("Michel", "Ducher", email = "michel.ducher@chu-lyon.fr", role = "aut"))
@@ -17,16 +17,16 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports: 
-    doSNOW,
+    doParallel,
     foreach,
     ggplot2,
     iterators,
+    parallel,
     reshape2,
     plyr,
-    snow,
     utils
 Suggests: knitr,
     rmarkdown,
     devtools
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

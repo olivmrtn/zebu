@@ -115,4 +115,3 @@ association values using p-values estimated by permutations.
 The \code{\link[zebu]{subgroups}} function identifies if the
 association between variables is dependent on the value of another variable.
 }
-

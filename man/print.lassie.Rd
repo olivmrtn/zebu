@@ -42,4 +42,3 @@ Print a \code{\link[zebu]{lassie}} object as an array or a data.frame.
 \seealso{
 \code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}
 }
-

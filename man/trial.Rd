@@ -17,4 +17,3 @@ trial
 Simulated clinical trial where patient recovery is dependent on drug intake and resistance status.
 }
 \keyword{datasets}
-
