@@ -4,10 +4,10 @@ make_trial_dataset = function() {
 
   # Simulation parameters
   n <- 100 # Number of patients
-  pr <- 0.5 # Proportion of resistant patients
-  pe <- 0.3 # Placebo effect on biomarker levels
-  de <- 0.3 # Drug effect on biomarker levels
-  sd <- 0.05 # Patient and drug effect individual differences
+  pr <- 0.8 # Proportion of resistant patients
+  pe <- 0.2 # Placebo effect on biomarker levels
+  de <- 0.5 # Drug effect on biomarker levels
+  sd <- 0.05 # Patient and drug effect individual differences (noise)
   sickbiom <- 0.3 # Mean of biomarker level for sick patients
   healthybiom <- 0.7 # Value above which patients are considered healthy
 
@@ -22,7 +22,7 @@ make_trial_dataset = function() {
   prebiom <- stats::rnorm(n, mean = sickbiom, sd = sd)
 
   # Simulate treatment of patients according to their resistance, drug intake and pretreatment biomarker levels
-  postbiom <- prebiom + pe + de * (resistance == "sensitive") * (drug == "drug") + stats::rnorm(n, mean = 0, sd = sd)
+  postbiom <- prebiom + pe  * (1 - (drug == "drug")) + de * (resistance == "sensitive") * (drug == "drug") + stats::rnorm(n, mean = 0, sd = sd)
 
   # Summarize results in data.frame and save
   trial <- data.frame(drug, resistance, prebiom, postbiom)

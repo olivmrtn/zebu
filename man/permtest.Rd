@@ -5,8 +5,7 @@
 \title{Permutation test for local and global association measures}
 \usage{
 permtest(x, group = as.list(colnames(x$data$pp)), nb = 1000L,
-  p_adjust = "BH", parallel = FALSE, progress_bar = FALSE,
-  ncpus = getOption("zebu.ncpus", 2L))
+  p_adjust = "BH", progress_bar = FALSE)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}
@@ -21,13 +20,7 @@ independant variable. By default, permutes all columns separetely.}
 \item{p_adjust}{multiple testing correction method.
 (see \code{\link[stats]{p.adjust.methods}} for a list of methods).}
 
-\item{parallel}{logical specifying if resampling should be parallelized.
-Relies on \code{\link[foreach]{foreach}} and \code{doParallel}.}
-
-\item{progress_bar}{logical specifying if progress bar should be displayed. Does not work if parallel resampling is used.}
-
-\item{ncpus}{\code{integer} specifying number of processes to be used in
-parallel operation.}
+\item{progress_bar}{logical specifying if progress bar should be displayed.}
 }
 \value{
 \code{permtest} returns an S3 object of \link[base]{class}

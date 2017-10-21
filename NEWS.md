@@ -13,3 +13,12 @@ zebu 0.1.1
 * Changed parallelization interface to foreach and parallel
 
 * Corrected typos in vignette
+
+zebu 0.1.2
+----------------------------------------------------------------
+
+* When p-value is estimated to be zero by permutations, displays that it is inferior to one over number of permuations and not equal to zero
+
+* Added plots describing dataset in and corrected typos in vignette
+
+* Removed buggy parallel interface

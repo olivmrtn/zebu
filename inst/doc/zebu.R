@@ -1,5 +1,6 @@
 ## ----opts = TRUE, setup = TRUE, include = FALSE--------------------------
 knitr::opts_chunk$set(echo = TRUE, comment = "")
+library(ggplot2)
 
 ## ------------------------------------------------------------------------
 set.seed(63) # Set seed for reproducibility
@@ -7,6 +8,29 @@ set.seed(63) # Set seed for reproducibility
 library(zebu) # Load zebu
 data(trial) # Load trial dataset
 head(trial) # Show head of trial dataset
+
+## ------------------------------------------------------------------------
+ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) + 
+  geom_histogram(alpha=0.5, position="identity", bins = 20) +
+  xlab("Biomarker levels before treatment") +
+  ylab("Number of Patients") +
+  xlim(c(0, 1)) +
+  scale_fill_discrete(name = "Patient", 
+                      labels = c("Resistant and Drug", 
+                                 "Resistant and Placebo",
+                                 "Sensitive and Drug", 
+                                 "Sensitive and Placebo"))
+
+ggplot(trial, aes(postbiom, fill = interaction(drug, resistance))) + 
+  geom_histogram(alpha=0.5, position="identity", bins = 20) +
+  xlab("Biomarker levels after treatment") +
+  ylab("Number of Patients") +
+  xlim(c(0, 1)) +
+  scale_fill_discrete(name = "Patient", 
+                      labels = c("Resistant and Drug", 
+                                 "Resistant and Placebo",
+                                 "Sensitive and Drug", 
+                                 "Sensitive and Placebo"))
 
 ## ------------------------------------------------------------------------
 las <- lassie(trial, 
@@ -17,9 +41,8 @@ las <- lassie(trial,
 
 ## ------------------------------------------------------------------------
 las <- permtest(las, 
-                nb = 1000, 
+                nb = 2000, 
                 p_adjust = "BH", 
-                parallel = FALSE, 
                 progress_bar = FALSE)
 
 ## ------------------------------------------------------------------------
@@ -30,12 +53,12 @@ plot(las)
 sub <- subgroups(las = las, 
                  x = trial, 
                  select = "resistance", 
-                 thresholds = c(-0.05, 0.05),
+                 thresholds = c(-0.01, 0.01),
                  significance = TRUE,
                  alpha = 0.01)
 
 ## ------------------------------------------------------------------------
-sub <- permtest(sub)
+sub <- permtest(sub, nb = 2000)
 
 ## ------------------------------------------------------------------------
 print(sub)

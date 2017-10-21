@@ -204,9 +204,16 @@ print.lassie <- function(x,
   # Make header (measure name and global association value)
   header <- paste0("Measure: ", measure_name(x), "\nGlobal: ", x$global)
   if (! is.null(x$global_p)) {
-    header <- paste0(header, " (p-value=", x$global_p, ")")
+    global_p <- x$global_p
+    if (global_p == 0) global_p <- paste0("<1/", x$perm_params$nb)
+    header <- paste0(header, " (p-value: ", global_p, ")")
   }
   header <- paste0(header, "\n")
+
+  # Replace null p-values
+  if ("local_p" %in% what_x) {
+    print_x[print_x == 0] <- paste0("<1/", x$perm_params$nb)
+  }
 
   # Print to console
   cat(header)
@@ -302,6 +309,12 @@ format.lassie <- function(x,
   if (na.rm) {
     format_x <- stats::na.omit(format_x)
   }
+
+  # Replace null p-values
+  if ("local_p" %in% what_x) {
+    format_x$local_p[format_x$local_p == 0] <- paste0("<1/", x$perm_params$nb)
+  }
+
   format_x
 }
 
@@ -390,7 +403,10 @@ plot.lassie <- function(x,
     tile_text <- paste0(tile_text, "\n", round(nrow(x$data$pp) * tile_value, digits))
 
   } else if (what_x == "local" & "permtest" %in% class(x)) {
-    tile_text <- paste0(tile_text, "\n", format(x$local_p, digits = digits, scientific = TRUE))
+    null_local_p <- x$local_p == 0
+    local_p <- format(x$local_p, digits = digits, scientific = TRUE)
+    local_p[null_local_p] <- paste0("<1/", x$perm_params$nb)
+    tile_text <- paste0(tile_text, "\n(", local_p, ")")
   }
 
   # Format values in data.frame for ggplot2
@@ -401,8 +417,11 @@ plot.lassie <- function(x,
 
   # Make title
   title <- paste0(measure_name(x), "\n", round(x$global, digits))
+
   if (! is.null(x$global_p)) {
-    title <- paste0(title, " (p-value=", x$global_p, ")")
+    global_p <- x$global_p
+    if (global_p == 0) global_p <- paste0("<1/", x$perm_params$nb)
+    title <- paste0(title, " (p-value: ", global_p, ")")
   }
 
   # Plot as tiles

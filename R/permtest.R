@@ -15,13 +15,7 @@
 #' @param p_adjust multiple testing correction method.
 #' (see \code{\link[stats]{p.adjust.methods}} for a list of methods).
 #'
-#' @param parallel logical specifying if resampling should be parallelized.
-#' Relies on \code{\link[foreach]{foreach}} and \code{doParallel}.
-#'
-#' @param progress_bar logical specifying if progress bar should be displayed. Does not work if parallel resampling is used.
-#'
-#' @param ncpus \code{integer} specifying number of processes to be used in
-#' parallel operation.
+#' @param progress_bar logical specifying if progress bar should be displayed.
 #'
 #' @return \code{permtest} returns an S3 object of \link[base]{class}
 #' \code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}.
@@ -49,13 +43,12 @@ permtest <- function(x,
                      group = as.list(colnames(x$data$pp)),
                      nb = 1000L,
                      p_adjust = "BH",
-                     parallel = FALSE,
-                     progress_bar = FALSE,
-                     ncpus = getOption("zebu.ncpus", 2L)) {
+                     progress_bar = FALSE) {
 
   # Local functions ----
   # Permutation
   compute_perm <- function() {
+
     # Permute data.frame
     nr <- nrow(df)
     perm <- do.call(cbind, lapply(group, function(j) {
@@ -112,7 +105,6 @@ permtest <- function(x,
   i <- 0L
   iterator <- iterators::icount(nb)
   foreacher <- foreach::foreach(i = iterator, .combine = rbind)
-  expr <- {compute_perm()}
 
   if (progress_bar) {
     pb <- utils::txtProgressBar(min = 0L, max = nb, style = 3L)
@@ -120,27 +112,16 @@ permtest <- function(x,
     on.exit(close(pb), add = TRUE)
   }
 
-  if (parallel) {
-    doer <-  foreach::`%dopar%`
-    cl <- parallel::makeCluster(ncpus)
-    doParallel::registerDoParallel(cl)
-    on.exit(parallel::stopCluster(cl))
+  doer <-  foreach::`%do%`
 
-    if (progress_bar) {
-      foreacher <- foreach::foreach(i = iterator, .combine = rbind)
-    }
-    permutations <- doer(foreacher, expr)
-
+  if (progress_bar) {
+    permutations <- doer(foreacher, {utils::setTxtProgressBar(pb, i); compute_perm()})
   } else {
-    doer <-  foreach::`%do%`
-
-    if (progress_bar) {
-      permutations <- doer(foreacher, {utils::setTxtProgressBar(pb, i); compute_perm()})
-    } else {
-      permutations <- doer(foreacher, expr)
-    }
+    permutations <- doer(foreacher, {compute_perm()})
   }
+
   permutations <- t(permutations)
+
 
   # Compute p-values ----
   # Compute global p-value
