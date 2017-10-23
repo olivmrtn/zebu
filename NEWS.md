@@ -19,6 +19,8 @@ zebu 0.1.2
 
 * When p-value is estimated to be zero by permutations, displays that it is inferior to one over number of permuations and not equal to zero
 
+* Corrected formula for estimating p-values
+
 * Added plots describing dataset in and corrected typos in vignette
 
 * Removed buggy parallel interface

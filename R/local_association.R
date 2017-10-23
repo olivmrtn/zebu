@@ -7,7 +7,7 @@
 #' @param measure name of measure to be used:
 #' \itemize{
 #' \item'z': Ducher's 'z'.
-#' \item'pmi': Pointwise mutual information.
+#' \item'pmi': Pointwise mutual information (in bits).
 #' \item'npmi': Normalized pointwise mutual information.
 #' }
 #'

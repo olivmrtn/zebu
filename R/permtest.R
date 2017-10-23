@@ -64,12 +64,9 @@ permtest <- function(x,
     c(global = lam$global, local = lam$local)
   }
 
-  # Estimate p-value by intersecting with values obtained with permutated datasets
+  # Estimate p-value
   p_value = function(observed_value, permuted_values) {
-    i <- findInterval(observed_value, sort(permuted_values, decreasing = FALSE)) # Find intersection
-    p <- i / length(permuted_values) # Convert into p-value
-    if (p > 0.5) p <- 1 - p # Two sided test
-    return(p)
+    sum(abs(observed_value) < abs(permuted_values)) / length(permuted_values)
   }
 
   # Check arguments ----
@@ -119,9 +116,6 @@ permtest <- function(x,
   } else {
     permutations <- doer(foreacher, {compute_perm()})
   }
-
-  permutations <- t(permutations)
-
 
   # Compute p-values ----
   # Compute global p-value

@@ -11,7 +11,7 @@ head(trial) # Show head of trial dataset
 
 ## ------------------------------------------------------------------------
 ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) + 
-  geom_histogram(alpha=0.5, position="identity", bins = 20) +
+  geom_histogram(alpha=0.5, position="identity", bins = 10) +
   xlab("Biomarker levels before treatment") +
   ylab("Number of Patients") +
   xlim(c(0, 1)) +
@@ -22,7 +22,7 @@ ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) +
                                  "Sensitive and Placebo"))
 
 ggplot(trial, aes(postbiom, fill = interaction(drug, resistance))) + 
-  geom_histogram(alpha=0.5, position="identity", bins = 20) +
+  geom_histogram(alpha=0.5, position="identity", bins = 10) +
   xlab("Biomarker levels after treatment") +
   ylab("Number of Patients") +
   xlim(c(0, 1)) +
@@ -30,7 +30,8 @@ ggplot(trial, aes(postbiom, fill = interaction(drug, resistance))) +
                       labels = c("Resistant and Drug", 
                                  "Resistant and Placebo",
                                  "Sensitive and Drug", 
-                                 "Sensitive and Placebo"))
+                                 "Sensitive and Placebo")) +
+  geom_vline(xintercept = 0.7)
 
 ## ------------------------------------------------------------------------
 las <- lassie(trial, 
@@ -41,7 +42,7 @@ las <- lassie(trial,
 
 ## ------------------------------------------------------------------------
 las <- permtest(las, 
-                nb = 2000, 
+                nb = 1000, 
                 p_adjust = "BH", 
                 progress_bar = FALSE)
 
@@ -58,7 +59,7 @@ sub <- subgroups(las = las,
                  alpha = 0.01)
 
 ## ------------------------------------------------------------------------
-sub <- permtest(sub, nb = 2000)
+sub <- permtest(sub, nb = 1000)
 
 ## ------------------------------------------------------------------------
 print(sub)
