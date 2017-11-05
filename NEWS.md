@@ -28,3 +28,6 @@ zebu 0.1.2
 Development
 ----------------------------------------------------------------
 
+* Added chi-squared residuals to lassie
+
+* Added installation information, chi-squared residuals and p-value formula to vignette

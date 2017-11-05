@@ -50,6 +50,8 @@ measure_name <- function(x) {
       "Pointwise Mutual Information"
     } else if (measure == "npmi") {
       "Normalized Pointwise Mutual Information"
+    } else if (measure == "chisq") {
+      "Chi-squared Residuals"
     } else {
       measure_error()
     }
@@ -57,7 +59,7 @@ measure_name <- function(x) {
 
 # Uncorrect measure selected error message
 measure_error <- function() {
-  stop("Invalid 'measure' argument. Choose from the following:\n  'z': Ducher's Z\n 'pmi': Pointwise Mutual Information\n 'npmi': Normalized pointwise Mutual Information")
+  stop("Invalid 'measure' argument. Choose from the following:\n  'z': Ducher's Z\n 'pmi': Pointwise Mutual Information\n 'npmi': Normalized pointwise Mutual Information\n 'chisq': Chi-squared Residuals")
 }
 
 # Generate comments for header of write.lassie file

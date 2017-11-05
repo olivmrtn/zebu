@@ -28,6 +28,7 @@ variable has no specified breaks, then \code{default_breaks} will be applied.}
 \item'z': Ducher's 'z'.
 \item'pmi': Pointwise mutual information (in bits).
 \item'npmi': Normalized pointwise mutual information.
+\item'chisq': Chi-squared residuals.
 }}
 
 \item{default_breaks}{default break points for discretizations.
@@ -46,7 +47,7 @@ An instance of S3 \link[base]{class} \code{\link[zebu]{lassie}} with
 }
 \description{
 Estimates local (and global) association measures: Ducher's Z and pointwise mutual
-information and normalized pointwise mutual information.
+information, normalized pointwise mutual information and chi-squared residuals.
 }
 \examples{
 # In this example, we will use the 'mtcars' dataset
@@ -89,7 +90,7 @@ print(las, type = 'df', range = c(0, 1), what_sort = 'obs')
 # Plot results as heatmap
 plot(las)
 
-# Plot observed probabilities using different colours
+# Plot observed probabilities using different colors
 plot(las, what_x = 'obs', low = 'white', mid = 'grey', high = 'black', text_colour = 'red')
 
 # Write results to text file

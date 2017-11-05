@@ -12,8 +12,8 @@ permtest(x, group = as.list(colnames(x$data$pp)), nb = 1000L,
 
 \item{group}{list of column names specifying which columns
 should be permuted together. This is useful for the multivariate case,
-for example, when there is many dependant variables and one
-independant variable. By default, permutes all columns separetely.}
+for example, when there is many dependent variables and one
+independent variable. By default, permutes all columns separately.}
 
 \item{nb}{number of resampling iterations.}
 

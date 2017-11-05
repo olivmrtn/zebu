@@ -4,7 +4,7 @@
 
 The `zebu` R package implements different tools related to local association measures in three main functions. It replaces the previous web application written using `shiny`.
 
-- `lassie` estimates local (and global) association measures: Ducher's Z, pointwise mutual information and normalized pointwise mutual information.
+- `lassie` estimates local (and global) association measures: Ducher's Z, pointwise mutual information, normalized pointwise mutual information and chi-squared residuals.
 
 - `permtest` accesses the significance of local (and global) association values using p-values estimated by permutations.
 

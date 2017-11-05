@@ -2,14 +2,24 @@
 knitr::opts_chunk$set(echo = TRUE, comment = "")
 library(ggplot2)
 
-## ------------------------------------------------------------------------
+## ----include=FALSE, paged.print=FALSE------------------------------------
 set.seed(63) # Set seed for reproducibility
 
+## ----eval=FALSE----------------------------------------------------------
+#  install.packages("zebu")
+
+## ----eval=FALSE----------------------------------------------------------
+#  # install.packages("devtools")
+#  devtools::install_github("oliviermfmartin/zebu")
+
+## ------------------------------------------------------------------------
 library(zebu) # Load zebu
+
+## ------------------------------------------------------------------------
 data(trial) # Load trial dataset
 head(trial) # Show head of trial dataset
 
-## ------------------------------------------------------------------------
+## ----echo=FALSE----------------------------------------------------------
 ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) + 
   geom_histogram(alpha=0.5, position="identity", bins = 10) +
   xlab("Biomarker levels before treatment") +

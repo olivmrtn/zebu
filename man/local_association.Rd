@@ -5,15 +5,18 @@
 \alias{duchers_z}
 \alias{pmi}
 \alias{npmi}
+\alias{chisq}
 \title{Local Association Measures}
 \usage{
-local_association(x, measure)
+local_association(x, measure, nr)
 
 duchers_z(x)
 
 pmi(x, normalize = FALSE)
 
 npmi(x)
+
+chisq(x, nr)
 }
 \arguments{
 \item{x}{list of probabilities as outputted by \code{\link[zebu]{estimate_prob}}.}
@@ -23,7 +26,10 @@ npmi(x)
 \item'z': Ducher's 'z'.
 \item'pmi': Pointwise mutual information (in bits).
 \item'npmi': Normalized pointwise mutual information.
+\item'chisq': Chi-squared residuals.
 }}
+
+\item{nr}{number of rows/samples. Only used to estimate chi-squared residuals.}
 
 \item{normalize}{Normalizes pointwise mutual information when calling \code{pmi}}
 }

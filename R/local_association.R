@@ -9,7 +9,9 @@
 #' \item'z': Ducher's 'z'.
 #' \item'pmi': Pointwise mutual information (in bits).
 #' \item'npmi': Normalized pointwise mutual information.
+#' \item'chisq': Chi-squared residuals.
 #' }
+#' @param nr number of rows/samples. Only used to estimate chi-squared residuals.
 #'
 #' @return List containing the following values:
 #' \itemize{
@@ -36,13 +38,16 @@
 #' @export
 #'
 local_association <- function(x,
-                              measure) {
+                              measure,
+                              nr) {
   if (measure == "z") {
     duchers_z(x)
   } else if (measure == "pmi") {
-      pmi(x, FALSE)
+    pmi(x, FALSE)
   } else if (measure == "npmi") {
-      pmi(x, TRUE)
+    pmi(x, TRUE)
+  } else if (measure == "chisq") {
+    chisq(x, nr)
   } else {
     measure_error()
   }
@@ -109,6 +114,27 @@ pmi <- function(x, normalize = FALSE) {
 
 #' @rdname local_association
 #' @export
+#'
 npmi <- function(x) {
   pmi(x, normalize = TRUE)
+}
+
+#' @rdname local_association
+#' @export
+#'
+chisq <- function(x, nr) {
+
+  expected <- x$expected
+  observed <- x$observed
+  margins <- expand.grid(x$margins)
+
+  # Compute global and local chi-squared
+  local <- sqrt(nr) * array((observed - expected) / sqrt(expected),
+                            dim = dim(expected), dimnames = dimnames(expected))
+  global <- sum(local**2)
+
+  lam <- list()
+  lam[["local"]] <- local
+  lam[["global"]] <- global
+  lam
 }
