@@ -19,9 +19,9 @@ library(zebu) # Load zebu
 data(trial) # Load trial dataset
 head(trial) # Show head of trial dataset
 
-## ----echo=FALSE----------------------------------------------------------
+## ----biomarker-histograms, echo=FALSE------------------------------------
 ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) + 
-  geom_histogram(alpha=0.5, position="identity", bins = 10) +
+  geom_histogram(alpha=0.5, position="identity", bins = 20) +
   xlab("Biomarker levels before treatment") +
   ylab("Number of Patients") +
   xlim(c(0, 1)) +
@@ -32,7 +32,7 @@ ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) +
                                  "Sensitive and Placebo"))
 
 ggplot(trial, aes(postbiom, fill = interaction(drug, resistance))) + 
-  geom_histogram(alpha=0.5, position="identity", bins = 10) +
+  geom_histogram(alpha=0.5, position="identity", bins = 20) +
   xlab("Biomarker levels after treatment") +
   ylab("Number of Patients") +
   xlim(c(0, 1)) +
@@ -56,7 +56,7 @@ las <- permtest(las,
                 p_adjust = "BH", 
                 progress_bar = FALSE)
 
-## ------------------------------------------------------------------------
+## ----plot-local-association----------------------------------------------
 print(las)
 plot(las)
 
@@ -71,7 +71,7 @@ sub <- subgroups(las = las,
 ## ------------------------------------------------------------------------
 sub <- permtest(sub, nb = 1000)
 
-## ------------------------------------------------------------------------
+## ----plot-subgroups------------------------------------------------------
 print(sub)
 plot(sub)
 
