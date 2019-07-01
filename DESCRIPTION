@@ -25,6 +25,6 @@ Imports:
     utils
 Suggests: knitr,
     rmarkdown,
-    devtools
+    usethis
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
