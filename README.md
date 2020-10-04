@@ -28,7 +28,7 @@ devtools::install_github("oliviermfmartin/zebu")
 
 ## Usage and Theory
 
-Please read the [vignette](http://cdn.rawgit.com/oliviermfmartin/zebu/master/doc/zebu.html).
+Please read the [vignette](https://ghcdn.rawgit.org/oliviermfmartin/zebu/master/doc/zebu.html).
 
 ## Contact
 
