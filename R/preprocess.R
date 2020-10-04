@@ -114,7 +114,7 @@ preprocess <- function(x,
     # Discretize if continuous
     if (i %in% continuous) {
       b <- breaks[[i]]
-      if (is.null(b) || is.na(b)) {
+      if (any(is.null(b) | is.na(b))) {
         b <- default_breaks
       }
       v <- cut(as.numeric(v), breaks = b, include.lowest = TRUE) }

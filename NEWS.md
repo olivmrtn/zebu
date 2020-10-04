@@ -25,9 +25,10 @@ zebu 0.1.2
 
 * Removed buggy parallel interface (too many cross-platform problems)
 
-Development
+zebu 0.1.3
 ----------------------------------------------------------------
 
 * Added chi-squared residuals to lassie
-
 * Added installation information, chi-squared residuals and p-value formula to vignette
+* Replaced deprecated devtools::use_data function call and fixed CRAN check errors
+

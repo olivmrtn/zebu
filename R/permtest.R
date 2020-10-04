@@ -31,11 +31,12 @@
 #' @seealso \code{\link[zebu]{lassie}}
 #'
 #' @examples
+#'
 #' # Calling lassie on cars dataset
 #' las <- lassie(cars)
 #'
 #' # Permutation test using default settings
-#' permtest(las)
+#' permtest(las, nb = 30) # keep resampling low for example
 #'
 #' @export
 #'

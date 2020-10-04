@@ -4,8 +4,13 @@
 \alias{permtest}
 \title{Permutation test for local and global association measures}
 \usage{
-permtest(x, group = as.list(colnames(x$data$pp)), nb = 1000L,
-  p_adjust = "BH", progress_bar = FALSE)
+permtest(
+  x,
+  group = as.list(colnames(x$data$pp)),
+  nb = 1000L,
+  p_adjust = "BH",
+  progress_bar = FALSE
+)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}
@@ -39,11 +44,12 @@ Permutation test: statistical significance of local and
 global association measures
 }
 \examples{
+
 # Calling lassie on cars dataset
 las <- lassie(cars)
 
 # Permutation test using default settings
-permtest(las)
+permtest(las, nb = 30) # keep resampling low for example
 
 }
 \seealso{

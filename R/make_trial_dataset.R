@@ -28,5 +28,5 @@ make_trial_dataset = function() {
 
   # Summarize results in data.frame and save
   trial <- data.frame(drug, resistance, prebiom, postbiom)
-  devtools::use_data(trial)
+  usethis::use_data(trial)
 }

@@ -3,7 +3,6 @@
 \docType{package}
 \name{zebu}
 \alias{zebu}
-\alias{zebu-package}
 \title{zebu: Local Association Measures}
 \description{
 The zebu package implements the estimation of local (and global) association measures: Ducher's Z, pointwise mutual information and normalized pointwise mutual information. The significance of local (and global) association is accessed using p-values estimated by permutations. Finally, using local association subgroup analysis, it identifies if the association between variables is dependent on the value of another variable.

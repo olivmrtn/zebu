@@ -4,8 +4,7 @@
 \alias{format.lassie}
 \title{Format a lassie object}
 \usage{
-\method{format}{lassie}(x, what_x, range, what_range, what_sort, decreasing,
-  na.rm, ...)
+\method{format}{lassie}(x, what_x, range, what_range, what_sort, decreasing, na.rm, ...)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}

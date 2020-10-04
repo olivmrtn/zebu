@@ -4,8 +4,17 @@
 \alias{subgroups}
 \title{Local Association Subgroup Analysis}
 \usage{
-subgroups(las, x, select, continuous, breaks, default_breaks = 4,
-  thresholds = c(-0.05, 0.05), significance, alpha = 0.01)
+subgroups(
+  las,
+  x,
+  select,
+  continuous,
+  breaks,
+  default_breaks = 4,
+  thresholds = c(-0.05, 0.05),
+  significance,
+  alpha = 0.01
+)
 }
 \arguments{
 \item{las}{\code{\link[zebu]{lassie}} S3 object. Corresponds to associated variables.}

@@ -12,7 +12,7 @@ abstract: |-
   Keywords: measure of association, statistical independence, local association, local association subgroup analysis, pointwise mutual information, Ducher’s Z, chi-squared residuals.
 vignette: >
   %\VignetteIndexEntry{"zebu: Local Association Measures"}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

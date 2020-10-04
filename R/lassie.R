@@ -75,12 +75,6 @@
 #' # Plot observed probabilities using different colors
 #' plot(las, what_x = 'obs', low = 'white', mid = 'grey', high = 'black', text_colour = 'red')
 #'
-#' # Write results to text file
-#' write.lassie(las, file = 'test.csv')
-#'
-#' # Retrieve results
-#' lassie_df <- read.table('test.csv', sep = ',', header = TRUE)
-#'
 #' @export
 #'
 lassie <- function(x,

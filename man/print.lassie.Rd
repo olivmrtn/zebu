@@ -4,8 +4,7 @@
 \alias{print.lassie}
 \title{Print a lassie object}
 \usage{
-\method{print}{lassie}(x, type, what_x, range, what_range, what_sort,
-  decreasing, na.rm, ...)
+\method{print}{lassie}(x, type, what_x, range, what_range, what_sort, decreasing, na.rm, ...)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}

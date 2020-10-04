@@ -4,8 +4,16 @@
 \alias{write.lassie}
 \title{Write a lassie object}
 \usage{
-write.lassie(x, file, sep = ",", dec = ".", col.names = TRUE,
-  row.names = FALSE, quote = TRUE, ...)
+write.lassie(
+  x,
+  file,
+  sep = ",",
+  dec = ".",
+  col.names = TRUE,
+  row.names = FALSE,
+  quote = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}

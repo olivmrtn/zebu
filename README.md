@@ -28,12 +28,12 @@ devtools::install_github("oliviermfmartin/zebu")
 
 ## Usage and Theory
 
-Please read the [vignette](http://cdn.rawgit.com/oliviermfmartin/zebu/master/inst/doc/zebu.html).
+Please read the [vignette](http://cdn.rawgit.com/oliviermfmartin/zebu/master/doc/zebu.html).
 
 ## Contact
 
 * Olivier Martin
-[oliviermfmartin@gmail.com](mailto:oliviermfmartin@gmail.com)
+[oliviermfmartin@tutanota.com](mailto:oliviermfmartin@tutanota.com)
 
 * Michel Ducher
 [michel.ducher@chu-lyon.fr](mailto:michel.ducher@chu-lyon.fr)
