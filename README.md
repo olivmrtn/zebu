@@ -12,7 +12,7 @@ The `zebu` R package implements different tools related to local association mea
 
 ## Installation
 
-Install [R](https://r-project.org/) and [RStudio](https://rstudio.com/).
+Install [R](https://www.r-project.org/) and [RStudio](https://rstudio.com/).
 
 Get the released version from CRAN:
 ```R
