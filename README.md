@@ -12,7 +12,7 @@ The `zebu` R package implements different tools related to local association mea
 
 ## Installation
 
-Install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/).
+Install [R](https://r-project.org/) and [RStudio](https://rstudio.com/).
 
 Get the released version from CRAN:
 ```R
@@ -28,7 +28,11 @@ devtools::install_github("oliviermfmartin/zebu")
 
 ## Usage and Theory
 
-Please read the [vignette](https://ghcdn.rawgit.org/oliviermfmartin/zebu/master/doc/zebu.html).
+Please read the vignette.
+
+```R
+vignette("zebu")
+```
 
 ## Contact
 
@@ -47,6 +51,6 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-The GNU General Public License is available at http://www.gnu.org/licenses/
+The GNU General Public License is available at https://gnu.org/licenses/
 
 The source code can be found at https://github.com/oliviermfmartin/zebu
