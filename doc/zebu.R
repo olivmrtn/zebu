@@ -1,86 +1,67 @@
 ## ----opts = TRUE, setup = TRUE, include = FALSE-------------------------------
 knitr::opts_chunk$set(echo = TRUE, comment = "")
-library(ggplot2)
-
-## ----include=FALSE, paged.print=FALSE-----------------------------------------
-set.seed(63) # Set seed for reproducibility
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  install.packages("zebu")
 
-## ----eval=FALSE---------------------------------------------------------------
-#  # install.packages("devtools")
-#  devtools::install_github("oliviermfmartin/zebu")
+## -----------------------------------------------------------------------------
+library(zebu) 
 
 ## -----------------------------------------------------------------------------
-library(zebu) # Load zebu
+starter_prob <- c("Tomato Mozzarella Salad" = 1/3, "Rice Tuna Salad" = 1/3, "Lentil Salad" = 1/3)
+starter_prob
 
 ## -----------------------------------------------------------------------------
-data(trial) # Load trial dataset
-head(trial) # Show head of trial dataset
-
-## ----biomarker-histograms, echo=FALSE-----------------------------------------
-ggplot(trial, aes(prebiom, fill = interaction(drug, resistance))) + 
-  geom_histogram(alpha=0.5, position="identity", bins = 20) +
-  xlab("Biomarker levels before treatment") +
-  ylab("Number of Patients") +
-  xlim(c(0, 1)) +
-  scale_fill_discrete(name = "Patient", 
-                      labels = c("Resistant and Drug", 
-                                 "Resistant and Placebo",
-                                 "Sensitive and Drug", 
-                                 "Sensitive and Placebo"))
-
-ggplot(trial, aes(postbiom, fill = interaction(drug, resistance))) + 
-  geom_histogram(alpha=0.5, position="identity", bins = 20) +
-  xlab("Biomarker levels after treatment") +
-  ylab("Number of Patients") +
-  xlim(c(0, 1)) +
-  scale_fill_discrete(name = "Patient", 
-                      labels = c("Resistant and Drug", 
-                                 "Resistant and Placebo",
-                                 "Sensitive and Drug", 
-                                 "Sensitive and Placebo")) +
-  geom_vline(xintercept = 0.7)
+main_given_starter_prob <- matrix(c(5/11, 1/11, 5/11,
+                                    5/11, 5/11, 1/10,
+                                    1/11, 5/11, 5/11),
+                                  3, 3, byrow = TRUE)
+rownames(main_given_starter_prob) <- names(starter_prob)
+colnames(main_given_starter_prob) <- c("Sausage and Lentil Stew", "Pizza Margherita", "Pilaf Rice")
+main_given_starter_prob
 
 ## -----------------------------------------------------------------------------
-las <- lassie(trial, 
-              select = c("drug", "postbiom"), 
-              continuous = "postbiom", 
-              breaks = c(0, 0.7, 1), 
-              measure = "z")
+dessert_given_main <- matrix(c(2/6, 2/6, 2/6,
+                               7/12, 1/12, 2/6, 
+                               1/12, 7/12, 2/6),
+                             3, 3, byrow = TRUE)
+rownames(dessert_given_main) <- colnames(main_given_starter_prob)
+colnames(dessert_given_main) <- c("Rice Pudding", "Apple Pie", "Fruit Salad")
+dessert_given_main
+
+## -----------------------------------------------------------------------------
+set.seed(0)
+sample_size <- 1000
+df <- t(sapply(seq_len(sample_size), function(i) {
+  
+  starter <- sample(names(starter_prob), size = 1, prob = starter_prob)
+  main <- sample(colnames(main_given_starter_prob), size = 1, prob = main_given_starter_prob[starter, ])
+  dessert <- sample(colnames(dessert_given_main), size = 1, prob = dessert_given_main[main, ])
+  
+  c(Starter = starter, Main = main, Dessert = dessert)
+}))
+df <- as.data.frame(df)
+
+## -----------------------------------------------------------------------------
+head(df)
+
+## -----------------------------------------------------------------------------
+table(df)
+
+## -----------------------------------------------------------------------------
+las <- lassie(df, select = c("Main", "Dessert"), measure = "z")
 
 ## -----------------------------------------------------------------------------
 las <- permtest(las, 
-                nb = 1000, 
-                p_adjust = "BH", 
-                progress_bar = FALSE)
+                nb = 5000, 
+                p_adjust = "BH")
 
 ## ----plot-local-association---------------------------------------------------
 print(las)
 plot(las)
 
 ## -----------------------------------------------------------------------------
-sub <- subgroups(las = las, 
-                 x = trial, 
-                 select = "resistance", 
-                 thresholds = c(-0.01, 0.01),
-                 significance = TRUE,
-                 alpha = 0.01)
-
-## -----------------------------------------------------------------------------
-sub <- permtest(sub, nb = 1000)
-
-## ----plot-subgroups-----------------------------------------------------------
-print(sub)
-plot(sub)
-
-## -----------------------------------------------------------------------------
-las2 <- lassie(trial, 
-               select = c("drug", "postbiom", "resistance"), 
-               continuous = "postbiom", 
-               breaks = c(0, 0.7, 1))
-las2 <- permtest(las2, 
-                 group = list("drug", c("postbiom", "resistance")), progress_bar = FALSE)
-print(las2)
+las2 <- lassie(df, measure = "z")
+las2 <- permtest(las2, nb = 5000)
+print(las2, what_sort = "local_p", decreasing = FALSE)
 

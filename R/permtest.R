@@ -5,17 +5,15 @@
 #'
 #' @param x \code{\link[zebu]{lassie}} S3 object.
 #'
+#' @param nb number of resampling iterations.
+#'
 #' @param group list of column names specifying which columns
 #' should be permuted together. This is useful for the multivariate case,
 #' for example, when there is many dependent variables and one
 #' independent variable. By default, permutes all columns separately.
 #'
-#' @param nb number of resampling iterations.
-#'
 #' @param p_adjust multiple testing correction method.
 #' (see \code{\link[stats]{p.adjust.methods}} for a list of methods).
-#'
-#' @param progress_bar logical specifying if progress bar should be displayed.
 #'
 #' @return \code{permtest} returns an S3 object of \link[base]{class}
 #' \code{\link[zebu]{lassie}} and \code{\link[zebu]{permtest}}.
@@ -39,31 +37,12 @@
 #' permtest(las, nb = 30) # keep resampling low for example
 #'
 #' @export
+#' @import data.table
 #'
 permtest <- function(x,
-                     group = as.list(colnames(x$data$pp)),
                      nb = 1000L,
-                     p_adjust = "BH",
-                     progress_bar = FALSE) {
-
-  # Local functions ----
-  # Permutation
-  compute_perm <- function() {
-
-    # Permute data.frame
-    nr <- nrow(df)
-    perm <- do.call(cbind, lapply(group, function(j) {
-      i <- sample(seq_len(nr))
-      df[i, j, drop = FALSE]
-    }))
-
-    # Compute association measures
-    prob <- zebu::estimate_prob(perm)
-    lam <- zebu::local_association(prob, measure, nr)
-
-    # Global is first row, all other rows are local association values
-    c(global = lam$global, local = lam$local)
-  }
+                     group = as.list(colnames(x$data$pp)),
+                     p_adjust = "BH") {
 
   # Estimate p-value
   p_value = function(observed_value, permuted_values) {
@@ -88,51 +67,38 @@ permtest <- function(x,
   }
 
   # Compute general variables ----
-  df <- x$data$pp
-  observed <- x$prob$observed  # Observed multivariate probability
-  dimensions <- dim(observed)  # Dimensions
-  dim_names <- dimnames(observed)  # Dimension names
+  dimensions <- dim(x$prob$observed)  # Dimensions
+  dim_names <- dimnames(x$prob$observed)  # Dimension names
   measure <- x$lassie_params[["measure"]]  # Get association measure used
   perm_params <- list(nb = nb, p_adjust = p_adjust) # Save parameters in list
 
   # Convert group argument integers to characters refering to colnames
-  if (any(! unlist(group) %in% colnames(df))) {
+  if (any(! unlist(group) %in% colnames(x$data$pp))) {
     stop("Invalid 'group' argument: must be a list of characters that correspond colnames.")
   }
+
   # Resampling ----
-  i <- 0L
-  iterator <- iterators::icount(nb)
-  foreacher <- foreach::foreach(i = iterator, .combine = rbind)
+  permutations <- permtest_rcpp(x, nb, group)
 
-  if (progress_bar) {
-    pb <- utils::txtProgressBar(min = 0L, max = nb, style = 3L)
-    progress <- function(i) utils::setTxtProgressBar(pb, i)
-    on.exit(close(pb), add = TRUE)
-  }
-
-  doer <-  foreach::`%do%`
-
-  if (progress_bar) {
-    permutations <- doer(foreacher, {utils::setTxtProgressBar(pb, i); compute_perm()})
-  } else {
-    permutations <- doer(foreacher, {compute_perm()})
-  }
+  # browser()
 
   # Compute p-values ----
   # Compute global p-value
-  global_perm <- permutations[, 1]
+  global_perm <- sapply(permutations, `[[`, "global")
   global_p <- p_value(x$global, global_perm)
 
   # Format local measure results to matrix: rows are local measure cells and
   # columns are resampling iterations
-  local_perm <- permutations[, 2:ncol(permutations)]
+  local_perm <- sapply(permutations, `[[`, "local")
+
+  # browser()
 
   # Compute local p-value for each cell
-  local_p <- sapply(1:length(x$local), function(i) {
+  local_p <- sapply(seq_len(length(x$local)), function(i) {
 
     # Retrieve observed value and permutation vector
     local_i <- x$local[i]
-    local_perm_i <- local_perm[, i]
+    local_perm_i <- local_perm[i, ]
 
     # If observed value is non-numerical (NA, NaN of Inf), return NA for p-value
     if (is.infinite(local_i) | is.na(local_i) | is.nan(local_i)) {

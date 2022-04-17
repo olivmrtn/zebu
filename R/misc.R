@@ -46,21 +46,21 @@ measure_name <- function(x) {
   measure <- x$lassie_params[["measure"]]
   if (measure == "z") {
     "Ducher's Z"
-    } else if (measure == "pmi") {
-      "Pointwise Mutual Information"
-    } else if (measure == "npmi") {
-      "Normalized Pointwise Mutual Information"
-    } else if (measure == "chisq") {
-      "Chi-squared Residuals"
-    } else {
-      measure_error()
-    }
+  } else if (measure == "d") {
+    "Lewontin's D"
+  } else if (measure == "pmi") {
+    "Pointwise Mutual Information"
+  } else if (measure == "npmi") {
+    "Normalized Pointwise Mutual Information (Bouma)"
+  } else if (measure == "npmi2") {
+    "Normalized Pointwise Mutual Information (Multivariate)"
+  } else if (measure == "chisq") {
+    "Chi-squared Residuals"
+  } else {
+    stop("Invalid 'measure' argument.")
+  }
 }
 
-# Uncorrect measure selected error message
-measure_error <- function() {
-  stop("Invalid 'measure' argument. Choose from the following:\n  'z': Ducher's Z\n 'pmi': Pointwise Mutual Information\n 'npmi': Normalized pointwise Mutual Information\n 'chisq': Chi-squared Residuals")
-}
 
 # Generate comments for header of write.lassie file
 generate_comments <- function(x) {
@@ -71,17 +71,22 @@ generate_comments <- function(x) {
     com <- paste0(com, "\n#\n", "# Permutation test parameters\n", "# Number of iterations: ",
                   x$perm_params$nb, "\n", "# P-value adjustment method: ", x$perm_params$p_adjust)
   }
-  if ("subgroups" %in% class(x)) {
-
-    com <- paste0(com, "\n#\n", "# Subgroups parameters\n", "# Thresholds: ",
-                  paste(x$sub_params$thresholds, collapse = " "), "\n", "# Non-significant values classified as negative: ",
-                  x$sub_params$significance)
-
-    if (x$sub_params$significance) {
-      com <- paste0(com, "\n# Alpha significance level (subgroup definition): ",
-                    x$sub_params$alpha)
-    }
-  }
   com <- paste0(com, "\n#")
   com
+}
+
+.compute_expected_probability <- function(margins) {
+  Reduce(outer, margins)
+}
+
+.compute_theoretical_max_prob <- function(margins) {
+  Reduce(function(x, y) outer(x, y, pmin), margins)
+}
+
+.compute_theoretical_min_prob <- function(margins) {
+  M <- length(margins)
+  out <- Reduce(function(x, y) outer(x, y, `+`), margins)
+  out <- out - M + 1
+  out[out<0] <- 0
+  out
 }

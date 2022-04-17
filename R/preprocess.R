@@ -42,16 +42,22 @@ preprocess <- function(x,
                        default_breaks = 4) {
 
   # Try to convert 'x' to data.frame
-  x <- tryCatch(as.data.frame(x), error = function(c) {
+  x <- tryCatch(as.data.table(x), error = function(c) {
     stop("Invalid 'x' argument: must be convertible to a data.frame")
   })
 
-  # Save 'x' data.frame to 'raw'
-  raw <- x
+  # Be sure to have colnames
+  if (is.null(colnames(x))) {
+    colnames(x) <- paste("V", seq_len(ncol(x)))
+  }
 
-  # Handle missing 'select' argument
+  # Handle missing arguments
   if (missing(select) || is.null(select)) {
     select <- colnames(x)
+  }
+
+  if (missing(continuous) || is.null(continuous)) {
+    continuous <- character(0L)
   }
 
   # Handle missing 'breaks' arguments
@@ -59,31 +65,19 @@ preprocess <- function(x,
     breaks <- default_breaks
   }
 
-  # Subset 'x' data.frame
-  x <- tryCatch(subset(raw, select = select), error = function(c) {
-    stop("Invalid 'select' argument: needs to be a vector of column numbers or column names")
-  })
-
-  # If 'select' argument is specified as column numbers, convert to variable names
-  select <- colnames(x)
-
-  # Handle missing 'continuous' argument
-  if (missing(continuous) || is.null(continuous)) {
-    continuous <- NULL
+  # Convert numeric columns to characters
+  if (all(is.numeric(select))) {
+    select <- colnames(x)[select]
   }
 
-  # If 'continuous' argument is specified as column numbers, convert to variable names
-  continuous <- tryCatch(colnames(subset(raw, select = continuous)), error = function(c) {
-    stop("Invalid 'continuous' argument: needs to be a vector of column numbers or column names")
-  })
+  if (all(is.numeric(continuous))) {
+    continuous <- colnames(x)[continuous]
+  }
 
   # Check if 'continuous' variables not in 'subset'
   if (any(! continuous %in% select)) {
     stop("Invalid 'continous' argument: contains variables names not in 'select' argument")
   }
-
-  # Save 'x' data.frame to 'raw' so that raw is subsetted
-  raw <- x
 
   # Categorical variables are variables that are not continuous
   categorical <- setdiff(select, continuous)
@@ -107,33 +101,45 @@ preprocess <- function(x,
     stop("Invalid 'breaks' argument: must be numeric vector or list (see help for format)")
   }
 
+  # Subset data
+  remove_cols <- colnames(x)[! colnames(x) %in% select]
+  if (length(remove_cols) > 0) {
+    set(x, j = remove_cols, value = NULL)
+  }
+
+  # Save 'x' data.frame to 'raw'
+  raw <- as.data.frame(x)
+
   # Discretize continuous variables according to breaks
-  x <- as.data.frame(lapply(select, function(i) {
-    v <- x[, i, drop = TRUE]
+  # browser()
+  for (j in select) {
+
+    v <- x[[j]]
 
     # Discretize if continuous
-    if (i %in% continuous) {
-      b <- breaks[[i]]
+    if (j %in% continuous) {
+      b <- breaks[[j]]
       if (any(is.null(b) | is.na(b))) {
         b <- default_breaks
       }
-      v <- cut(as.numeric(v), breaks = b, include.lowest = TRUE) }
-
-    # Convert to character if categorical
-    else {
-      v <- as.character(v)
+      if (! is.numeric(v)) {
+        v <- as.numeric(v)
+      }
+      v <- cut(v, breaks = b, include.lowest = TRUE)
     }
+
+    v <- as.factor(v)
     # Check if discretizations worked
     if (is.null(v)) {
-      stop(paste("Could not discretize", i))
+      stop(paste("Could not discretize", j))
     }
-    # Return factor
-    factor(v)
-  }))
-  colnames(x) <- select
 
-  # Remove missing values
+    data.table::set(x, j = j, value = v)
+  }
+
+  # Remove NAs
   x <- stats::na.omit(x)
+  x <- as.data.frame(x)
 
   # Check if rows are left
   if (nrow(x) == 0) {

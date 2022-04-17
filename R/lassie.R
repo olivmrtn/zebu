@@ -28,9 +28,6 @@
 #' The \code{\link[zebu]{permtest}} function accesses the significance of local and global
 #'association values using p-values estimated by permutations.
 #'
-#' The \code{\link[zebu]{subgroups}} function identifies if the
-#' association between variables is dependent on the value of another variable.
-#'
 #' @examples
 #' # In this example, we will use the 'mtcars' dataset
 #'
@@ -81,7 +78,7 @@ lassie <- function(x,
                    select,
                    continuous,
                    breaks,
-                   measure = "z",
+                   measure = "chisq",
                    default_breaks = 4) {
 
   # Preprocess data (handle missing data and discretize continuous variables)
@@ -109,7 +106,7 @@ lassie <- function(x,
                         default_breaks = pre$default_breaks)
 
   # Return lassie and 'measure' S3 object
-  structure(list(data = pre[c("raw", "pp")],
+  structure(list(data = pre,
                  prob = prob,
                  global = global,
                  local = local,
@@ -337,9 +334,9 @@ format.lassie <- function(x,
 plot.lassie <- function(x,
                         what_x = "local",
                         digits = 3,
-                        low = "blue",
-                        mid = "white",
-                        high = "red",
+                        low = "royalblue",
+                        mid = "gainsboro",
+                        high = "firebrick",
                         na = "purple",
                         text_colour = "black",
                         text_size,
@@ -371,11 +368,12 @@ plot.lassie <- function(x,
   if (missing(limits) || is.null(limits)) {
     if (what_x %in% c("local")) {
       midpoint <- 0
-      if (measure %in% c("z", "npmi")) {
-        limits <- c(-1, 1)
-      } else {
-        # Pointwise Mutual Information
+      if (measure %in% c("z", "npmi", "npmi2")) {
+        limits <- c(-1.00001, 1.00001)
+      } else if (measure %in% c("d", "pmi", "chisq")) {
         limits <- range(tile_value, na.rm = TRUE)
+      } else {
+        stop("Invalid measure.")
       }
     } else {
       # Probabilities
@@ -424,17 +422,24 @@ plot.lassie <- function(x,
                                                    y = "factor(Rows)",
                                                    fill = "Value")) +
     ggplot2::geom_tile() +
-    ggplot2::geom_text(ggplot2::aes_string(label = "Text"), size = text_size, colour = text_colour) +
+    ggplot2::geom_text(ggplot2::aes_string(label = "Text"),
+                       size = text_size,
+                       colour = text_colour) +
     ggplot2::scale_fill_gradient2(low = low,
                                   mid = mid,
                                   high = high,
                                   na.value = na,
                                   midpoint = midpoint,
-                                  limits = limits) +
+                                  limits = limits,
+                                  name = NULL) +
     ggplot2::ggtitle(title) +
     ggplot2::xlab(axis_labels[2]) +
     ggplot2::ylab(axis_labels[1]) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
+    ggplot2::theme_minimal(base_size = 13) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1),
+                   axis.ticks = ggplot2::element_blank(),
+                   panel.grid = ggplot2::element_blank(),
+                   axis.line = ggplot2::element_blank())
 
   ggp
 }

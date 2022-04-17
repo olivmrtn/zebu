@@ -4,7 +4,7 @@
 \alias{lassie}
 \title{Local Association Measures}
 \usage{
-lassie(x, select, continuous, breaks, measure = "z", default_breaks = 4)
+lassie(x, select, continuous, breaks, measure = "chisq", default_breaks = 4)
 }
 \arguments{
 \item{x}{data.frame or matrix.}
@@ -25,10 +25,12 @@ variable has no specified breaks, then \code{default_breaks} will be applied.}
 
 \item{measure}{name of measure to be used:
 \itemize{
+\item'chisq': Chi-squared residuals.
+\item'd': Lewontin's D.
 \item'z': Ducher's 'z'.
 \item'pmi': Pointwise mutual information (in bits).
-\item'npmi': Normalized pointwise mutual information.
-\item'chisq': Chi-squared residuals.
+\item'npmi': Normalized pointwise mutual information (Bouma).
+\item'npmi2': Normalized pointwise mutual information (Multivariate).
 }}
 
 \item{default_breaks}{default break points for discretizations.
@@ -106,7 +108,4 @@ Results can be saved using \code{\link[zebu]{write.lassie}}.
 
 The \code{\link[zebu]{permtest}} function accesses the significance of local and global
 association values using p-values estimated by permutations.
-
-The \code{\link[zebu]{subgroups}} function identifies if the
-association between variables is dependent on the value of another variable.
 }

@@ -4,28 +4,20 @@
 \alias{permtest}
 \title{Permutation test for local and global association measures}
 \usage{
-permtest(
-  x,
-  group = as.list(colnames(x$data$pp)),
-  nb = 1000L,
-  p_adjust = "BH",
-  progress_bar = FALSE
-)
+permtest(x, nb = 1000L, group = as.list(colnames(x$data$pp)), p_adjust = "BH")
 }
 \arguments{
 \item{x}{\code{\link[zebu]{lassie}} S3 object.}
+
+\item{nb}{number of resampling iterations.}
 
 \item{group}{list of column names specifying which columns
 should be permuted together. This is useful for the multivariate case,
 for example, when there is many dependent variables and one
 independent variable. By default, permutes all columns separately.}
 
-\item{nb}{number of resampling iterations.}
-
 \item{p_adjust}{multiple testing correction method.
 (see \code{\link[stats]{p.adjust.methods}} for a list of methods).}
-
-\item{progress_bar}{logical specifying if progress bar should be displayed.}
 }
 \value{
 \code{permtest} returns an S3 object of \link[base]{class}

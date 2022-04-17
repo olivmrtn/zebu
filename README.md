@@ -1,4 +1,4 @@
-# zebu
+# zebu: Local Association Measures
 
 ## Description
 
@@ -8,27 +8,20 @@ The `zebu` R package implements different tools related to local association mea
 
 - `permtest` accesses the significance of local (and global) association values using p-values estimated by permutations.
 
-- `subgroups` identifies if the association between variables is dependent on the value of another variable.
 
 ## Installation
 
-Install [R](https://www.r-project.org/) and [RStudio](https://rstudio.com/).
+Install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/).
 
-Get the released version from CRAN:
+Get the released version from [CRAN](https://CRAN.R-project.org/package=zebu).
+
 ```R
 install.packages("zebu")
 ```
 
-or the development version from Github:
-
-```R
-# install.packages("devtools")
-devtools::install_github("oliviermfmartin/zebu")
-```
-
 ## Usage and Theory
 
-Please read the vignette.
+Please read the [vignette](https://CRAN.R-project.org/package=zebu/vignettes/zebu.html).
 
 ```R
 vignette("zebu")
@@ -44,8 +37,8 @@ vignette("zebu")
 
 ## License
 
-zebu 0.1
-Copyright (C) 2017
+zebu 0.2
+Copyright (C) 2021
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
