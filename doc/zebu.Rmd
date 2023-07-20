@@ -8,7 +8,7 @@ output: rmarkdown::html_document
 bibliography: bibliography.bib
 abstract: |-
   Association measures can be local or global. Local association measures quantify the association between specific values of random variables (*e.g.* chi-squared residuals). Global association measures yield a single value used to summarize the association for all values taken by random variables (*e.g.* chi-squared). Classical data analysis has focused on global association and overlooked local association. Consequently, software presently available only allows computation of global association measures. Nonetheless, a significant global association can hide a non-significant local association, and a non-significant global association can hide a significant local association. \
-  The `zebu` R package allows estimation of local association measures and implements local association subgroup analysis. It is of interest to a wide range of scientific disciplines such as health and computer sciences and can be used by anyone with a basic knowledge of the R language. It is available in the CRAN and its source code is available at http://github.com/oliviermfmartin/zebu. \
+  The `zebu` R package allows estimation of local association measures and implements local association subgroup analysis. It is of interest to a wide range of scientific disciplines such as health and computer sciences and can be used by anyone with a basic knowledge of the R language. It is available in the CRAN and its source code is available at https://github.com/oliviermfmartin/zebu. \
   Keywords: measure of association, statistical independence, local association, pointwise mutual information, Lewontin's D, Ducher’s Z, chi-squared residuals.
 vignette: >
   %\VignetteIndexEntry{"zebu: Local Association Measures"}
@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
 3. [Local Association Measures](#section-lam)
       - [Derivation of Bivariate Forms](#section-lam1)
       - [Global Association](#section-lam2)
-      - [Permutation Test](#section-lam3)
+      - [Statistical Significance Tests](#section-lam3)
       - [Derivation of Multivariate Forms](#section-lam3)
 4. [User's Guide - An Example with Simulated Data](#section-ug)
       - [Simulating the Dataset](#section-ug1)
@@ -145,7 +145,7 @@ The global association measure related to chi-squared residuals is the chi-squar
 \]
 
 <div id='section-lam3'>
-#### Permutation Test
+#### Statistical Significance Tests
 
 Distinguishing the strength of association from its statistical significance is important. Indeed, a strong association can be non-significant (*e.g.* some physical law with small sample size) and a weak association can be significant (*e.g.* epidemiological risk factor with big sample size). Significance can be accessed using p-values estimated using the theoretical null distribution or by resampling techniques [@sheskin_handbook_2007]. Because the theoretical null distribution of local association measures is unknown, the `zebu` package resorts to estimating p-values by a permutation test. This can be undertaken using the `permtest` function of the package.
 
@@ -155,7 +155,13 @@ The null hypothesis $H_0$ being tested is that the association measure $L$ is eq
 p = \frac{\#(|L_{obs}| < |L_{perm}|)}{\#(L_{perm})}
 \]
 
-For local association measures, this results in conducting a series of statistical tests. It is thus advised to apply multiple testing corrections, such as the one advocated by Benjamini-Hochberg.
+With chi-squared residuals in a two-dimensional setting, an alternative analytical method for estimating the p-values can be employed as implemented by the `chisqtest` function. This function calculates two-sided p-values for each local chi-squared residual, assuming that these residuals are distributed according to a standard normal distribution. Thus, the two-sided p-value $p$ can be computed as follows where $\Phi(\ldots)$ is the cumulative distribution function of the standard normal distribution, and $L_{obs}$ denotes the observed chi-squared residuals:
+
+\[
+p = 2 \times (1 - \Phi(|L_{obs}|))
+\]
+
+As these local association measures involve conducting multiple statistical tests, it is advisable to apply corrections for multiple testing, such as the method proposed by Benjamini and Hochberg.
 
 <div id='section-lam4'>
 #### Derivation of Multivariate Forms
@@ -345,6 +351,8 @@ The `lassie` and `permtest` functions return a `lassie` S3 object, as well as `p
 print(las)
 plot(las)
 ```
+
+Alternatively, for two dimensional chi-squared analysis, significance can be estimated using the `chisqtest` function.
 
 Results can be saved in CSV format using `write.lassie`. To access the documentation of these functions, please type `help("print.lassie")`, `help("plot.lassie")` and `help(write.lassie)` in the R console.
 

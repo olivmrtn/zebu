@@ -48,7 +48,7 @@ An instance of S3 \link[base]{class} \code{\link[zebu]{lassie}} with
   }
 }
 \description{
-Estimates local (and global) association measures: Ducher's Z and pointwise mutual
+Estimates local (and global) association measures: Ducher's Z, Lewontin's D, pointwise mutual
 information, normalized pointwise mutual information and chi-squared residuals.
 }
 \examples{
@@ -108,4 +108,7 @@ Results can be saved using \code{\link[zebu]{write.lassie}}.
 
 The \code{\link[zebu]{permtest}} function accesses the significance of local and global
 association values using p-values estimated by permutations.
+
+The \code{\link[zebu]{chisqtest}} function accesses the significance in the case
+of two dimensional chi-squared analysis.
 }

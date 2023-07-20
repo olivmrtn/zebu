@@ -8,10 +8,11 @@ The `zebu` R package implements different tools related to local association mea
 
 - `permtest` accesses the significance of local (and global) association values using p-values estimated by permutations.
 
+- `chisqtest` accesses the significance for two dimensional chi-squared analysis.
 
 ## Installation
 
-Install [R](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/).
+Install [R](https://www.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/).
 
 Get the released version from [CRAN](https://CRAN.R-project.org/package=zebu).
 
@@ -37,8 +38,8 @@ vignette("zebu")
 
 ## License
 
-zebu 0.2
-Copyright (C) 2021
+zebu 0.2.1
+Copyright (C) 2023
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

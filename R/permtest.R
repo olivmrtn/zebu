@@ -31,7 +31,7 @@
 #' @examples
 #'
 #' # Calling lassie on cars dataset
-#' las <- lassie(cars)
+#' las <- lassie(cars, continuous = colnames(cars))
 #'
 #' # Permutation test using default settings
 #' permtest(las, nb = 30) # keep resampling low for example
@@ -79,8 +79,6 @@ permtest <- function(x,
 
   # Resampling ----
   permutations <- permtest_rcpp(x, nb, group)
-
-  # browser()
 
   # Compute p-values ----
   # Compute global p-value

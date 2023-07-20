@@ -52,3 +52,8 @@ zebu 0.2.0
 * Association plot looks nicer
 
 * Removed subgroup analysis
+
+zebu 0.2.1
+----------------------------------------------------------------
+
+* Added `chisqtest` function

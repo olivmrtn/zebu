@@ -38,7 +38,7 @@ global association measures
 \examples{
 
 # Calling lassie on cars dataset
-las <- lassie(cars)
+las <- lassie(cars, continuous = colnames(cars))
 
 # Permutation test using default settings
 permtest(las, nb = 30) # keep resampling low for example

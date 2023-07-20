@@ -1,6 +1,6 @@
 #' @title Local Association Measures
 #'
-#' @description Estimates local (and global) association measures: Ducher's Z and pointwise mutual
+#' @description Estimates local (and global) association measures: Ducher's Z, Lewontin's D, pointwise mutual
 #' information, normalized pointwise mutual information and chi-squared residuals.
 #'
 #' @inheritParams preprocess
@@ -27,6 +27,9 @@
 #'
 #' The \code{\link[zebu]{permtest}} function accesses the significance of local and global
 #'association values using p-values estimated by permutations.
+#'
+#' The \code{\link[zebu]{chisqtest}} function accesses the significance in the case
+#' of two dimensional chi-squared analysis.
 #'
 #' @examples
 #' # In this example, we will use the 'mtcars' dataset
@@ -124,7 +127,7 @@ lassie <- function(x,
 #' @param type print style: 'array' for array or 'df' for data.frame.
 #' @param ... other arguments passed on to methods. Not currently used.
 #'
-#' @seealso \code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}
+#' @seealso \code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}, \code{\link[zebu]{chisqtest}}
 #'
 #' @export
 #'
@@ -194,11 +197,11 @@ print.lassie <- function(x,
   }
 
   # Make header (measure name and global association value)
-  header <- paste0("Measure: ", measure_name(x), "\nGlobal: ", x$global)
+  header <- paste0("Measure: ", measure_name(x), "\nGlobal: ", round(x$global, digits = 3))
   if (! is.null(x$global_p)) {
     global_p <- x$global_p
     if (global_p == 0) global_p <- paste0("<1/", x$perm_params$nb)
-    header <- paste0(header, " (p-value: ", global_p, ")")
+    header <- paste0(header, " (p-value: ", format(global_p, scientific = TRUE, digits = 3), ")")
   }
   header <- paste0(header, "\n")
 
@@ -247,7 +250,7 @@ format.lassie <- function(x,
   # Check arguments
   if (missing(what_x) || is.null(what_x)) {
     what_x <- c("local", "obs", "exp")
-    if ("permtest" %in% class(x))
+    if ("permtest" %in% class(x) | "chisqtest" %in% class(x))
       what_x <- c(what_x, "local_p")
   }
 
@@ -351,7 +354,7 @@ plot.lassie <- function(x,
 
   # Define text size in cells
   if (missing(text_size)) {
-    if (what_x == "local" & "permtest" %in% class(x)) {
+    if (what_x == "local" & ("permtest" %in% class(x) | "chisqtest" %in% class(x))) {
       text_size <- 4
     } else {
       text_size <- 5
@@ -395,7 +398,7 @@ plot.lassie <- function(x,
   if (what_x == "obs" | what_x == "exp") {
     tile_text <- paste0(tile_text, "\n", round(nrow(x$data$pp) * tile_value, digits))
 
-  } else if (what_x == "local" & "permtest" %in% class(x)) {
+  } else if (what_x == "local" & ("permtest" %in% class(x) | "chisqtest" %in% class(x))) {
     null_local_p <- x$local_p == 0
     local_p <- format(x$local_p, digits = digits, scientific = TRUE)
     local_p[null_local_p] <- paste0("<1/", x$perm_params$nb)
@@ -414,7 +417,7 @@ plot.lassie <- function(x,
   if (! is.null(x$global_p)) {
     global_p <- x$global_p
     if (global_p == 0) global_p <- paste0("<1/", x$perm_params$nb)
-    title <- paste0(title, " (p-value: ", global_p, ")")
+    title <- paste0(title, " (p-value: ", format(global_p, digits = digits, scientific = TRUE), ")")
   }
 
   # Plot as tiles
@@ -454,7 +457,7 @@ plot.lassie <- function(x,
 #' @param file character string naming a file.
 #' @param ... other arguments passed on to write.table.
 #'
-#' @seealso \code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}
+#' @seealso \code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}, \code{\link[zebu]{chisqtest}}
 #'
 #' @export
 #'

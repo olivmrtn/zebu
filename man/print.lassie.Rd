@@ -16,7 +16,7 @@
 \item 'local': local association measure values (default).
 \item 'obs': observed probabilities.
 \item 'exp': expected probabilities.
-\item 'local_p': p-value of local association (after running \code{\link[zebu]{permtest}}).
+\item 'local_p': p-value of local association (after running \code{\link[zebu]{permtest}} or \code{\link[zebu]{chisqtest}}).
 }}
 
 \item{range}{range of values to be retained (vector of two numeric values).}
@@ -39,5 +39,5 @@ By default, takes the first value in \code{what_x}.}
 Print a \code{\link[zebu]{lassie}} object as an array or a data.frame.
 }
 \seealso{
-\code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}
+\code{\link[zebu]{lassie}}, \code{\link[zebu]{permtest}}, \code{\link[zebu]{chisqtest}}
 }

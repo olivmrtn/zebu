@@ -14,7 +14,7 @@
 \item 'local': local association measure values (default).
 \item 'obs': observed probabilities.
 \item 'exp': expected probabilities.
-\item 'local_p': p-value of local association (after running \code{\link[zebu]{permtest}}).
+\item 'local_p': p-value of local association (after running \code{\link[zebu]{permtest}} or \code{\link[zebu]{chisqtest}}).
 }}
 
 \item{range}{range of values to be retained (vector of two numeric values).}
