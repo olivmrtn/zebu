@@ -10,9 +10,8 @@
 #'
 #' \code{\link[zebu]{permtest}} accesses the significance of local (and global) association values usingp-values estimated by permutations.
 #'
-#' \code{\link[zebu]{permtest}} accesses the significance for two dimensional chi-squared analysis.
+#' \code{\link[zebu]{chisqtest}} accesses the significance for two dimensional chi-squared analysis.
 #'
-#' @docType package
 #' @name zebu
 #'
-NULL
+"_PACKAGE"

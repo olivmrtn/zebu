@@ -3,6 +3,7 @@
 \docType{package}
 \name{zebu}
 \alias{zebu}
+\alias{zebu-package}
 \title{zebu: Local Association Measures}
 \description{
 The zebu package implements the estimation of local (and global) association measures:
@@ -16,6 +17,23 @@ The significance of local (and global) association is accessed using p-values es
 
 \code{\link[zebu]{permtest}} accesses the significance of local (and global) association values usingp-values estimated by permutations.
 
-\code{\link[zebu]{permtest}} accesses the significance for two dimensional chi-squared analysis.
+\code{\link[zebu]{chisqtest}} accesses the significance for two dimensional chi-squared analysis.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/oliviermfmartin/zebu}
+  \item Report bugs at \url{https://github.com/oliviermfmartin/zebu/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Olivier M. F. Martin \email{oliviermfmartin@tutanota.com}
+
+Authors:
+\itemize{
+  \item Michel Ducher \email{michel.ducher@chu-lyon.fr}
+}
+
+}
